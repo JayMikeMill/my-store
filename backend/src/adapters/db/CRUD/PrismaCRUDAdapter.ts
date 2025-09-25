@@ -11,25 +11,46 @@ interface NestedFieldOptions {
 
 export type FieldMetadata<T> = Partial<Record<keyof T, NestedFieldOptions>>;
 
-function stripIds(obj: Record<string, any>) {
-  for (const key in obj) {
-    if (key === "id" || key.endsWith("Id")) {
-      delete obj[key];
-    } else if (obj[key] && typeof obj[key] === "object") {
-      stripIds(obj[key]);
+function stripIdsRecursive(obj: any): any {
+  if (obj && typeof obj === "object") {
+    if (Array.isArray(obj)) {
+      return obj.map(stripIdsRecursive);
+    } else {
+      for (const key in obj) {
+        if (key === "id" || key.endsWith("Id")) {
+          delete obj[key];
+        } else {
+          obj[key] = stripIdsRecursive(obj[key]);
+        }
+      }
+    }
+  }
+
+  return obj;
+}
+
+// ---------------- Nested Helpers ----------------
+// Recursive function to remove all IDs from the object except root
+// Helper functions
+function stripIds(obj: any): any {
+  if (obj && typeof obj === "object") {
+    for (const key in obj) {
+      if (key === "id" || key.endsWith("Id")) {
+        delete obj[key];
+      }
     }
   }
   return obj;
 }
 
-// ---------------- Nested Helpers ----------------
-function upsertNested<T extends { id?: string }>(items?: T[]) {
+function upsertNested<T extends { id?: string }>(items?: T[]): any {
   if (!items?.length) return undefined;
-  return items.map(({ id, ...data }) => ({
-    where: { id: id ?? "" },
-    update: data,
-    create: data,
-  }));
+
+  return items.map((item) => {
+    const { id } = item;
+    if (!id) return { create: stripIds(item) }; // New row
+    return { where: { id }, update: stripIds(item) }; // Existing row
+  });
 }
 
 function createNested<T extends object>(items?: T[], stripId = true) {
@@ -37,7 +58,7 @@ function createNested<T extends object>(items?: T[], stripId = true) {
   return {
     create: items.map((item) => {
       const copy = { ...item };
-      stripIds(copy); // always strip all ids
+      stripIdsRecursive(copy); // always strip all ids
       return copy;
     }),
   };
@@ -53,7 +74,7 @@ function replaceNested<T extends object>(items?: T[], path?: string) {
       const copy: { [key: string]: any } = { ...item };
 
       // Remove all IDs recursively
-      stripIds(copy);
+      stripIdsRecursive(copy);
 
       // Handle nested path recursively
       if (path && copy[path]) copy[path] = createNested(copy[path]);
@@ -91,6 +112,8 @@ export class PrismaCRUDAdapter<T> implements CRUDAdapter<T> {
   }
 
   private toPrisma(data: Partial<T>, action: "create" | "update") {
+    console.log("toPrisma called with:", { data, action });
+
     if (!this.fields) return data;
     const result: any = { ...data };
 
@@ -105,29 +128,10 @@ export class PrismaCRUDAdapter<T> implements CRUDAdapter<T> {
 
       switch (type) {
         case "createNested":
-          if (Array.isArray(value) && value.length) {
-            // <-- only process non-empty arrays
-            result[key] = {
-              create: (value as any[]).map((item) => {
-                const copy = { ...item };
-                if (path && copy[path]) copy[path] = createNested(copy[path]);
-                delete copy.id; // strip id for create
-                delete copy.productId; // strip FK
-                return copy;
-              }),
-            };
-          } else {
-            delete result[key]; // remove empty array
-          }
+          result[key] = createNested(value as any[]);
           break;
-
         case "upsertNested":
-          if (action === "update") {
-            // Send empty array or undefined => explicitly deletes all nested rows
-            result[key] = replaceNested(value as any[], path);
-          } else {
-            result[key] = createNested(value as any[], false);
-          }
+          result[key] = replaceNested(value as any[], path); // update only
           break;
 
         case "set":

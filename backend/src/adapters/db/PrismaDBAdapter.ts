@@ -52,7 +52,7 @@ class ProductCRUD extends PrismaCRUDAdapter<Product> {
         //dimensions: { type: "upsert" },
         categories: { type: "set" },
         collections: { type: "set" },
-        reviews: { type: "createNested" },
+        //reviews: { type: "createNested" },
       },
 
       include: {
@@ -63,7 +63,7 @@ class ProductCRUD extends PrismaCRUDAdapter<Product> {
         categories: true,
         collections: true,
         variants: true,
-        reviews: true,
+        //reviews: true,
       },
     });
   }

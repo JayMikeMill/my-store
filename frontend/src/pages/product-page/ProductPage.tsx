@@ -53,18 +53,14 @@ const ProductPage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-mt-8">
-      <div className="flex flex-col md:flex-row justify-center items-start md:items-start gap-8">
-        // Inside your render
-        <ProductPageImages images={product.images ?? []} />
-        {/* Product Details */}
-        <div className="flex flex-col gap-4 w-auto  text-left self-start">
-          <div className="flex items-center justify-center">
-            <h1 className="text-3xl font-bold text-text mb-2">
-              {product.name}
-            </h1>
-          </div>
-          <div className="flex items-center justify-center gap-4 mb-2">
+    <div className="p-mt-8">
+      <div className="flex flex-col md:flex-row justify-center md:items-start pb-2">
+        {/* Small screen: Name & Price above image */}
+        <div className="flex flex-col gap-2 md:hidden items-center w-full px-4">
+          <h1 className="text-4xl font-bold text-text text-center">
+            {product.name}
+          </h1>
+          <div className="flex items-center justify-center gap-2">
             {product.discount && discountedPrice < product.price ? (
               <>
                 <span className="text-xl text-textMuted line-through">
@@ -81,13 +77,41 @@ const ProductPage = () => {
               </span>
             )}
           </div>
+        </div>
+
+        {/* Product Image */}
+        <div className="w-full md:w-auto flex justify-center pb-4">
+          <ProductPageImages images={product.images ?? []} />
+        </div>
+
+        {/* Product Details (md+ layout) */}
+        <div className="flex flex-col gap-4 w-full md:w-auto text-left self-start px-4 md:px-0">
+          <div className="hidden md:flex flex-col gap-2">
+            <h1 className="text-3xl font-bold text-text">{product.name}</h1>
+            <div className="flex items-center gap-4">
+              {product.discount && discountedPrice < product.price ? (
+                <>
+                  <span className="text-xl text-textMuted line-through">
+                    ${product.price.toFixed(2)}
+                  </span>
+                  <span className="text-2xl text-text font-bold">
+                    ${discountedPrice.toFixed(2)}
+                  </span>
+                  <span className="tag-box">{discountLabel} OFF!</span>
+                </>
+              ) : (
+                <span className="text-2xl text-blue-600 font-bold">
+                  ${product.price.toFixed(2)}
+                </span>
+              )}
+            </div>
+          </div>
 
           <ProductOptionSelector
             product={product}
             onVariantChange={setSelectedVariant}
           />
 
-          {/* Tags & Description */}
           {Array.isArray(product.tags) && product.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-2">
               {product.tags.map((tag, index) => (

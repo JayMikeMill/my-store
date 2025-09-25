@@ -1,5 +1,5 @@
 // frontend/src/components/cart/ShoppingCartItem.tsx
-import { type CartItem } from "src/types/CartItem";
+import type { CartItem } from "@models/CartItem";
 import { parseVariantOptions } from "@shared/types/Product";
 
 interface ShoppingCartItemProps {
@@ -48,7 +48,7 @@ export default function ShoppingCartItem({
 
       <div className="flex items-center gap-xs">
         <button
-          className="px-2 py-1 bg-surfaceAlt rounded hover:bg-surface transition-colors"
+          className="px-2 py-1 bg-surfaceAlt rounded-full text-text"
           onClick={() => removeFromCart({ ...item, quantity: 1 })}
           aria-label={`Remove one ${name}`}
           type="button"
@@ -59,7 +59,7 @@ export default function ShoppingCartItem({
           {item.quantity}
         </span>
         <button
-          className="px-2 py-1 bg-surfaceAlt rounded hover:bg-surface transition-colors"
+          className="px-2 py-1 bg-surfaceAlt rounded-full text-text"
           onClick={() => addToCart({ ...item, quantity: 1 })}
           aria-label={`Add one ${name}`}
           type="button"

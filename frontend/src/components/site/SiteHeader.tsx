@@ -1,9 +1,10 @@
-import { SITE } from "../../config";
+// SiteHeader.tsx
 import { useNavigate } from "react-router-dom";
 import { ShoppingCart, Menu, X } from "lucide-react";
 import { useCart, getCartTotals } from "@contexts/CartContext";
 import { useState } from "react";
 
+import { SITE } from "../../site-config";
 import SlideOutCart from "@components/shopping-cart/SlideOutCart";
 import SiteMenu from "@components/site/SiteMenu";
 

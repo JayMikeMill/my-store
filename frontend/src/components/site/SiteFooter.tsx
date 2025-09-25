@@ -1,16 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { SITE } from "../../site-config";
 
 const SiteFooter: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <footer className="bg-background text-text font-sans py-8">
-      {/* Main content */}
       <div className="max-w-[1200px] mx-auto px-8 flex flex-col md:flex-row justify-between gap-8 flex-wrap">
         {/* Logo / Info */}
         <div className="flex-1 min-w-[250px] mb-6 md:mb-0">
-          <h2 className="text-title font-bold mb-4">My Store</h2>
-          <p className="text-secondary">
-            Providing quality products since 2023.
-          </p>
+          <h2 className="text-title font-bold mb-4">{SITE.name}</h2>
+          <p className="text-secondary">{SITE.slogan}</p>
         </div>
 
         {/* Quick Links */}
@@ -18,19 +19,28 @@ const SiteFooter: React.FC = () => {
           <h2 className="text-lg font-semibold mb-4">Quick Links</h2>
           <ul className="space-y-2">
             <li>
-              <a href="/" className="hover:text-primary transition-colors">
+              <button
+                onClick={() => navigate("/")}
+                className="hover:text-primary transition-colors"
+              >
                 Home
-              </a>
+              </button>
             </li>
             <li>
-              <a href="/about" className="hover:text-primary transition-colors">
+              <button
+                onClick={() => navigate("/about")}
+                className="hover:text-primary transition-colors"
+              >
                 About
-              </a>
+              </button>
             </li>
             <li>
-              <a href="/cart" className="hover:text-primary transition-colors">
+              <button
+                onClick={() => navigate("/cart")}
+                className="hover:text-primary transition-colors"
+              >
                 Cart
-              </a>
+              </button>
             </li>
           </ul>
         </div>
@@ -52,9 +62,8 @@ const SiteFooter: React.FC = () => {
         </div>
       </div>
 
-      {/* Footer bottom */}
       <div className="mt-8 pt-4 border-t border-secondary text-center text-muted text-sm">
-        &copy; {new Date().getFullYear()} My Store | All Rights Reserved
+        &copy; {new Date().getFullYear()} {SITE.name} | All Rights Reserved
       </div>
     </footer>
   );

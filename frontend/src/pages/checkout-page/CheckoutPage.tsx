@@ -4,7 +4,8 @@ import { type ShippingInfo } from "@shared/types/Shipping";
 
 import OrderPreview from "./OrderPreview";
 import ShippingForm from "./ShippingForm";
-import PaymentFormSquare from "./payment-forms/PaymentFormSquare";
+
+//import PaymentFormSquare from "./payment-forms/PaymentFormSquare";
 import PaymentFormStripe from "./payment-forms/PaymentFormStripe";
 
 export default function CheckoutPage() {
@@ -49,7 +50,7 @@ export default function CheckoutPage() {
   }, [shippingInfo]);
 
   return (
-    <div className="max-w-[700px] mx-auto font-sans text-text relative">
+    <div className="max-w-[700px] p-2 mx-auto font-sans text-text relative">
       <h2 className="text-[2rem]  text-bold text-center text-title pb-md">
         Checkout
       </h2>

@@ -53,7 +53,7 @@ const ProductPage = () => {
   };
 
   return (
-    <div className="p-mt-8">
+    <div className="p-mt-8 p-4">
       <div className="flex flex-col md:flex-row justify-center md:items-start pb-2">
         {/* Small screen: Name & Price above image */}
         <div className="flex flex-col gap-2 md:hidden items-center w-full px-4">

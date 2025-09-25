@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import SiteHeader from "@components/site/SiteHeader";
 import SiteFooter from "@components/site/SiteFooter";
 import HomePage from "@pages/HomePage";
@@ -14,23 +14,19 @@ import AdminUsersDash from "@pages/admin/AdminUsersDash";
 import AdminSettingsDash from "@pages/admin/AdminSettingsDash";
 
 import { applyTheme } from "./theme";
-import { ProtectedRoute } from "@pages/ProtectedRoute";
 import { Roles } from "../../shared/types/User";
+import { ProtectedRoute } from "./routes/ProtectedRoute";
+import ScrollToTop from "./routes/ScrollToTop";
 
 export default function App() {
-  const location = useLocation();
-  const isAdminPage = location.pathname.startsWith("/admin");
   applyTheme("dark");
+
   return (
     <div>
       <SiteHeader />
       <main>
-        <div
-          className="bg-background"
-          style={{
-            padding: isAdminPage ? "0px" : "20px",
-          }}
-        >
+        <div className="bg-background">
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/Product/:id" element={<ProductPage />} />
@@ -42,6 +38,7 @@ export default function App() {
                 </ProtectedRoute>
               }
             >
+              <Route index element={<AdminProductsDash />} />
               <Route path="products-dash" element={<AdminProductsDash />} />
               <Route path="catalog-dash" element={<AdminCatalogDash />} />
               <Route path="orders-dash" element={<AdminOrdersDash />} />

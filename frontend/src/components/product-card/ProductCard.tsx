@@ -86,9 +86,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </p>
           )}
         </div>
-        <button className="btn-primary w-full mt-sm" onClick={handleAddToCart}>
-          Add to Cart
-        </button>
       </div>
     </div>
   );

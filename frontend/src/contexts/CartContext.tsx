@@ -5,7 +5,7 @@ import {
   useContext,
   type ReactNode,
 } from "react";
-import type { CartItem } from "src/types/CartItem";
+import type { CartItem } from "@models/CartItem";
 
 interface CartContextType {
   cart: CartItem[];

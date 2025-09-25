@@ -14,7 +14,7 @@ export default function OrderPreview() {
   }
 
   return (
-    <div className="max-w-[700px] mx-auto p-6 bg-surface rounded-lg shadow flex flex-col gap-4">
+    <div className="p-6 bg-surface rounded-lg shadow flex flex-col gap-4">
       <h3 className="text-center text-xl font-semibold mb-4">Order Summary</h3>
 
       <div className="flex flex-col gap-3">

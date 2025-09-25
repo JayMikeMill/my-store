@@ -14,7 +14,8 @@ import {
   PaymentMethods,
   OrderStatuses,
 } from "@shared/types/Order";
-import type { CartItem } from "src/types/CartItem";
+
+import type { CartItem } from "@models/CartItem";
 
 interface StripePaymentFormProps {
   total: number;
@@ -122,7 +123,7 @@ function InnerStripeForm({
   };
 
   return (
-    <div className="input-box max-w-2xl mx-auto p-lg bg-surface rounded-lg shadow-xl flex flex-col gap-md text-text font-sans">
+    <div className="input-box p-lg bg-surface rounded-lg shadow-xl flex flex-col gap-md text-text font-sans">
       <h3 className="text-3xl mb-lg text-center font-bold">
         {total > 0 ? "Payment" : ""}
       </h3>
@@ -130,7 +131,7 @@ function InnerStripeForm({
         Total: ${total.toFixed(2)}
       </p>
 
-      <div className="w-full h-52 mb-md border border-border rounded-md bg-background p-4">
+      <div className="w-full h-auto mb-md border border-border rounded-md bg-background p-4">
         <CardElement
           options={{
             style: {
@@ -141,14 +142,15 @@ function InnerStripeForm({
                 ).getPropertyValue("--color-text"),
                 fontFamily: "inherit",
                 "::placeholder": {
-                  color:
-                    getComputedStyle(document.documentElement).getPropertyValue(
-                      "--color-text"
-                    ) || "#888",
+                  color: getComputedStyle(
+                    document.documentElement
+                  ).getPropertyValue("--color-text-secondary"),
                 },
               },
               invalid: {
-                color: "#ff4d4f", // for invalid input
+                color: getComputedStyle(
+                  document.documentElement
+                ).getPropertyValue("--color-danger"),
               },
             },
           }}

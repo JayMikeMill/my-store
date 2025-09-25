@@ -2,7 +2,7 @@
 import { PrismaClient } from "@prisma/client";
 import type { QueryObject } from "@shared/types/QueryObject";
 type NestedType = "upsertNested" | "createNested" | "set" | "upsert";
-import { CRUDAdapter } from "./CRUDAdapter";
+import { CRUDInterface } from "@shared/types/crud-interface";
 
 interface NestedFieldOptions {
   type: NestedType;
@@ -11,16 +11,19 @@ interface NestedFieldOptions {
 
 export type FieldMetadata<T> = Partial<Record<keyof T, NestedFieldOptions>>;
 
-function stripIdsRecursive(obj: any): any {
+// ---------------- Nested Helpers ----------------
+// Recursive function to remove all IDs from the object except root
+// Helper functions
+function stripIdsRecursively(obj: any): any {
   if (obj && typeof obj === "object") {
     if (Array.isArray(obj)) {
-      return obj.map(stripIdsRecursive);
+      return obj.map(stripIdsRecursively);
     } else {
       for (const key in obj) {
         if (key === "id" || key.endsWith("Id")) {
           delete obj[key];
         } else {
-          obj[key] = stripIdsRecursive(obj[key]);
+          obj[key] = stripIdsRecursively(obj[key]);
         }
       }
     }
@@ -29,36 +32,12 @@ function stripIdsRecursive(obj: any): any {
   return obj;
 }
 
-// ---------------- Nested Helpers ----------------
-// Recursive function to remove all IDs from the object except root
-// Helper functions
-function stripIds(obj: any): any {
-  if (obj && typeof obj === "object") {
-    for (const key in obj) {
-      if (key === "id" || key.endsWith("Id")) {
-        delete obj[key];
-      }
-    }
-  }
-  return obj;
-}
-
-function upsertNested<T extends { id?: string }>(items?: T[]): any {
-  if (!items?.length) return undefined;
-
-  return items.map((item) => {
-    const { id } = item;
-    if (!id) return { create: stripIds(item) }; // New row
-    return { where: { id }, update: stripIds(item) }; // Existing row
-  });
-}
-
 function createNested<T extends object>(items?: T[], stripId = true) {
   if (!items?.length) return undefined;
   return {
     create: items.map((item) => {
       const copy = { ...item };
-      stripIdsRecursive(copy); // always strip all ids
+      stripIdsRecursively(copy); // always strip all ids
       return copy;
     }),
   };
@@ -74,7 +53,7 @@ function replaceNested<T extends object>(items?: T[], path?: string) {
       const copy: { [key: string]: any } = { ...item };
 
       // Remove all IDs recursively
-      stripIdsRecursive(copy);
+      stripIdsRecursively(copy);
 
       // Handle nested path recursively
       if (path && copy[path]) copy[path] = createNested(copy[path]);
@@ -94,7 +73,7 @@ export interface PrismaCRUDAdpaterOptions<T> {
   fields?: FieldMetadata<T>;
 }
 
-export class PrismaCRUDAdapter<T> implements CRUDAdapter<T> {
+export class PrismaCRUDAdapter<T> implements CRUDInterface<T> {
   private prisma: PrismaClient;
   private model: keyof PrismaClient;
   private include?: any;
@@ -112,7 +91,10 @@ export class PrismaCRUDAdapter<T> implements CRUDAdapter<T> {
   }
 
   private toPrisma(data: Partial<T>, action: "create" | "update") {
-    console.log("toPrisma called with:", { data, action });
+    console.log("toPrisma called with:", {
+      data: JSON.stringify(data),
+      action,
+    });
 
     if (!this.fields) return data;
     const result: any = { ...data };
@@ -209,9 +191,12 @@ export class PrismaCRUDAdapter<T> implements CRUDAdapter<T> {
     return { data: results.map(this.fromPrisma.bind(this)), total };
   }
 
-  async update(id: string, updates: Partial<T>): Promise<T> {
+  async update(updates: Partial<T> & { id?: string }): Promise<T> {
+    if (!updates.id) {
+      throw new Error("Document id is required for update");
+    }
     const updated = await this.client.update({
-      where: { id },
+      where: { id: updates.id },
       data: this.toPrisma(updates, "update"),
       include: this.include,
     });

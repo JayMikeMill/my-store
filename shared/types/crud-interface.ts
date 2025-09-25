@@ -1,10 +1,9 @@
-// src/crud/ICrudAdapter.ts
-import type { QueryObject } from "@shared/types/QueryObject";
+import { QueryObject } from "./QueryObject";
 
-export interface CRUDAdapter<T> {
+export interface CRUDInterface<T> {
   create(data: Partial<T>): Promise<T>;
   get(id: string): Promise<T | null>;
   getAll(query?: QueryObject): Promise<{ data: T[]; total: number }>;
-  update(id: string, updates: Partial<T>): Promise<T>;
+  update(updates: Partial<T> & { id: string }): Promise<T>;
   delete(id: string): Promise<T>;
 }

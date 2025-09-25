@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useApi } from "@api/useApi";
 import type { Order } from "@shared/types/Order";
 
-import DynamicTable from "@components/DynamicTable";
+import DynamicTable from "@components/dynamic-table/DynamicTable";
 import OrderDialog from "@components/dialogs/OrderDialog";
 
 export default function AdminSettingsDash() {

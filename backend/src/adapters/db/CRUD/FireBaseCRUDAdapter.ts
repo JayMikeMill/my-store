@@ -1,9 +1,9 @@
 // backend/src/crud/FirebaseCRUD.ts
 import { db } from "@config/firebase/firebaseAdmin";
-import type { CRUDAdapter } from "./CRUDAdapter";
+import type { CRUDInterface } from "@shared/types/crud-interface";
 
 export class FirebaseCRUDAdapter<T extends { id?: string }>
-  implements CRUDAdapter<T>
+  implements CRUDInterface<T>
 {
   private collection: string;
 
@@ -26,20 +26,42 @@ export class FirebaseCRUDAdapter<T extends { id?: string }>
 
   async getAll(): Promise<{ data: T[]; total: number }> {
     const snapshot = await db.collection(this.collection).get();
+    interface GetAllResult<T> {
+      data: T[];
+      total: number;
+    }
+
+    interface FirestoreDocumentSnapshot<T> {
+      data(): T | undefined;
+      id: string;
+    }
+
+    interface FirestoreQuerySnapshot<T> {
+      docs: FirestoreDocumentSnapshot<T>[];
+      size: number;
+    }
+
+    const typedSnapshot = snapshot as unknown as FirestoreQuerySnapshot<T>;
+
     return {
-      data: snapshot.docs.map((d) => ({ ...d.data(), id: d.id }) as T),
-      total: snapshot.size,
-    };
+      data: typedSnapshot.docs.map(
+        (d: FirestoreDocumentSnapshot<T>) => ({ ...d.data(), id: d.id }) as T
+      ),
+      total: typedSnapshot.size,
+    } as GetAllResult<T>;
   }
 
-  async update(id: string, updates: Partial<T>): Promise<T> {
-    const docRef = db.collection(this.collection).doc(id);
+  async update(updates: Partial<T> & { id?: string }): Promise<T> {
+    if (!updates.id) {
+      throw new Error("Document id is required for update");
+    }
+    const docRef = db.collection(this.collection).doc(updates.id);
     const doc = await docRef.get();
     if (!doc.exists) {
-      throw new Error(`Document with id ${id} does not exist`);
+      throw new Error(`Document with id ${updates.id} does not exist`);
     }
     await docRef.update(updates);
-    return { ...(doc.data() as T), ...updates, id };
+    return { ...(doc.data() as T), ...updates, id: updates.id };
   }
 
   async delete(id: string): Promise<T> {

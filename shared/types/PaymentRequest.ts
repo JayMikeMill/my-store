@@ -1,7 +1,7 @@
 import type { Address } from "./Shipping";
 
 export type PaymentRequest = {
-  nonce: string;
+  token: string;
   amount: number;
 
   items: {

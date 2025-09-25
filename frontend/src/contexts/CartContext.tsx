@@ -1,43 +1,40 @@
-// Import React functions
-import type { Product, ProductVariant } from "@shared/types/Product";
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useState,
+  createContext,
+  useContext,
+  type ReactNode,
+} from "react";
+import type { CartItem } from "src/types/CartItem";
 
-// Define the shape of a cart item
-export interface CartItem {
-  product: Product;
-  variant?: ProductVariant;
-  quantity: number;
-  price: number;
-}
-// -------------------------
-// 1. Define what the context will hold
-// -------------------------
 interface CartContextType {
-  cart: CartItem[]; // The current cart items
-  addToCart: (item: CartItem) => void; // Function to add items
-  removeFromCart: (item: CartItem) => void; // Function to remove items
-  clearCart: () => void; // Function to empty the cart
+  cart: CartItem[];
+  addToCart: (item: CartItem) => void;
+  removeFromCart: (item: CartItem) => void;
+  clearCart: () => void;
 }
 
-// -------------------------
-// Create the context (magic backpack)
-// -------------------------
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-// -------------------------
-// Define the Provider component
-// This will wrap your app/pages and provide cart state
-// -------------------------
 interface CartProviderProps {
-  children: ReactNode; // Everything inside this provider
+  children: ReactNode;
 }
 
 export const CartProvider = ({ children }: CartProviderProps) => {
-  // The cart state
-  const [cart, setCart] = useState<CartItem[]>([]); // starts empty
+  // Load initial cart from localStorage or default to empty
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    if (typeof window === "undefined") return [];
+    const stored = localStorage.getItem("cart");
+    return stored ? JSON.parse(stored) : [];
+  });
 
-  // Add item to cart
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
   const addToCart = (item: CartItem) => {
+    console.log("Adding to cart:", item);
     setCart((prevCart) => {
       const existingIndex = prevCart.findIndex(
         (cartItem) =>
@@ -53,13 +50,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         };
         return updatedCart;
       } else {
-        return [
-          ...prevCart,
-          {
-            ...item,
-            quantity: item.quantity || 1,
-          },
-        ];
+        return [...prevCart, { ...item, quantity: item.quantity || 1 }];
       }
     });
   };
@@ -84,10 +75,11 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     });
   };
 
-  // Clear entire cart
-  const clearCart = () => setCart([]);
+  const clearCart = () => {
+    setCart([]);
+    localStorage.removeItem("cart"); // also clear storage
+  };
 
-  // Provide the cart + functions to children
   return (
     <CartContext.Provider
       value={{ cart, addToCart, removeFromCart, clearCart }}
@@ -97,9 +89,6 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   );
 };
 
-// -------------------------
-// Custom hook to use the cart in any component
-// -------------------------
 export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) throw new Error("useCart must be used within a CartProvider");

@@ -1,14 +1,12 @@
 import { PaymentRequest } from "@shared/types/PaymentRequest";
-import { SquarePaymentAdapter } from "@adapters/payment/SquarePaymentAdapter";
-
-const adapter = new SquarePaymentAdapter();
+import { payment } from "@config/adapters";
 
 export class PaymentService {
   static async processPayment(data: PaymentRequest) {
-    return adapter.processPayment(data);
+    return payment.processPayment(data);
   }
 
   static async refundPayment(paymentId: string, amount?: number) {
-    return adapter.refundPayment(paymentId, amount);
+    return payment.refundPayment(paymentId, amount);
   }
 }

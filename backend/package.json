@@ -23,6 +23,7 @@
     "multer": "^2.0.2",
     "sqlite3": "^5.1.7",
     "square": "^43.0.2",
+    "stripe": "^18.5.0",
     "superjson": "^2.2.2"
   },
   "devDependencies": {

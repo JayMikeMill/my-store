@@ -1,9 +1,9 @@
 // src/routes/crudRouter.ts
 import { Router, Request, Response, NextFunction } from "express";
-import { CRUDAdapter } from "@adapters/db/CRUD/CRUDAdapter";
 import { requireRole } from "@middleware/authorization";
 import type { Role } from "@middleware/authorization";
 import { QueryObject } from "@shared/types/QueryObject";
+import { CRUDInterface } from "@shared/types/crud-interface";
 
 /**
  * If rolesAllowed is empty or undefined, route is public.
@@ -22,7 +22,7 @@ export type CRUDRouteOptions = {
  * Authorization is applied only if rolesAllowed has roles.
  */
 export function createCRUDRoute(
-  crud: CRUDAdapter<any>,
+  crud: CRUDInterface<any>,
   options?: CRUDRouteOptions
 ) {
   const router = Router();
@@ -86,7 +86,7 @@ export function createCRUDRoute(
     next: NextFunction
   ) => {
     try {
-      const updated = await crud.update(req.params.id, req.body);
+      const updated = await crud.update(req.body);
       if (!updated) return res.status(404).json({ error: "Not found" });
       res.json(updated);
     } catch (err) {

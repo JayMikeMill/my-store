@@ -17,14 +17,14 @@ const client = new SquareClient({
 
 export class SquarePaymentAdapter implements PaymentAdapter {
   async processPayment(data: PaymentRequest) {
-    const { nonce, amount, items, address } = data;
+    const { token, amount, items, address } = data;
 
     console.log("Processing payment with info:", data);
     console.log("Using Square access token:", process.env.SQUARE_ACCESS_TOKEN);
 
     // Create the payment request
     const requestBody: Square.CreatePaymentRequest = {
-      sourceId: nonce || "cnon:card-nonce-ok", // Sandbox default nonce
+      sourceId: token || "cnon:card-nonce-ok", // Sandbox default nonce
       idempotencyKey: crypto.randomUUID(), // Prevent duplicate charges
       amountMoney: {
         amount: BigInt(Math.round(amount * 100)), // Dollars → cents

@@ -1,4 +1,4 @@
-import { CRUDAdapter } from "./CRUD/CRUDAdapter";
+import { CRUDInterface } from "@shared/types/crud-interface";
 
 import {
   Product,
@@ -12,14 +12,14 @@ import { Order } from "@shared/types/Order";
 import { User } from "@shared/types/User";
 
 export interface DBAdapter {
-  products: CRUDAdapter<Product>;
-  productOptionsPresets: CRUDAdapter<ProductOptionsPreset>;
-  productTagsPresets: CRUDAdapter<ProductTagPreset>;
-  productVariants: CRUDAdapter<ProductVariant>;
-  productReviews: CRUDAdapter<ProductReview>;
+  products: CRUDInterface<Product>;
+  productOptionsPresets: CRUDInterface<ProductOptionsPreset>;
+  productTagsPresets: CRUDInterface<ProductTagPreset>;
+  productVariants: CRUDInterface<ProductVariant>;
+  productReviews: CRUDInterface<ProductReview>;
 
-  categories: CRUDAdapter<Category>;
-  collections: CRUDAdapter<Collection>;
-  orders: CRUDAdapter<Order>;
-  users: CRUDAdapter<User>;
+  categories: CRUDInterface<Category>;
+  collections: CRUDInterface<Collection>;
+  orders: CRUDInterface<Order>;
+  users: CRUDInterface<User>;
 }

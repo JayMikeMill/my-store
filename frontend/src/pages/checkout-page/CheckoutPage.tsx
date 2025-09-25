@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { useCart } from "@contexts/CartContext";
 import { type ShippingInfo } from "@shared/types/Shipping";
-import ShippingForm from "@components/forms/ShippingForm";
-import PaymentFormSquare from "@components/forms/payment-forms/PaymentFormSquare";
-import OrderPreview from "@components/viewers/OrderPreview";
+
+import OrderPreview from "./OrderPreview";
+import ShippingForm from "./ShippingForm";
+import PaymentFormSquare from "./payment-forms/PaymentFormSquare";
+import PaymentFormStripe from "./payment-forms/PaymentFormStripe";
 
 export default function CheckoutPage() {
   const { cart: cartItems } = useCart();
@@ -24,7 +26,7 @@ export default function CheckoutPage() {
     },
     email: "",
     phone: "",
-    method: "standard",
+    method: "STANDARD",
     carrier: "UPS",
     trackingNumber: null,
     cost: 0,
@@ -59,9 +61,9 @@ export default function CheckoutPage() {
         setShippingInfo={setShippingInfo}
       />
 
-      <PaymentFormSquare
+      <PaymentFormStripe
         total={total}
-        orderItems={cartItems}
+        cartItems={cartItems}
         shippingInfo={shippingInfo}
         setLoading={setLoading}
         setMessage={setMessage}

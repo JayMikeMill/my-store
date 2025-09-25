@@ -33,7 +33,7 @@
       "@api/*": ["src/api/*"],
       "@hooks/*": ["src/hooks/*"],
       "@utils/*": ["src/utils/*"],
-      "@services/*": ["src/services/*"],
+      "@types/*": ["src/types/*"],
       "@shared/*": ["../shared/*"],
       "@data/*": ["src/data/*"],
       "@config/*": ["src/config/*"],

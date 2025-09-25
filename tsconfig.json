@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022", // modern JS output target
-    "module": "ESNext", // use ES modules
+    "module": "commonjs", // use CommonJS modules
     "moduleResolution": "Node", // resolve node_modules
     "strict": true, // enable all strict checks
     "esModuleInterop": true, // allow import from CommonJS
@@ -15,6 +15,10 @@
     "resolveJsonModule": true,
     "allowJs": true
   },
-  "include": ["backend/src/**/*.ts", "frontend/src/**/*.tsx", "prisma/**/*.ts"],
+  "include": [
+    "backend/src/**/*.ts",
+    "frontend/src/**/*.tsx",
+    "unit-tests/**/*"
+  ],
   "exclude": ["node_modules", "dist", "build"]
 }

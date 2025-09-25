@@ -1,13 +1,13 @@
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import SiteHeader from "@components/SiteHeader";
-import SiteFooter from "@components/SiteFooter";
+import SiteHeader from "@components/site/SiteHeader";
+import SiteFooter from "@components/site/SiteFooter";
 import HomePage from "@pages/HomePage";
 import ProductPage from "@pages/product-page/ProductPage";
-import CheckoutPage from "@pages/CheckoutPage";
+import CheckoutPage from "@pages/checkout-page/CheckoutPage";
 import AboutPage from "./pages/AboutPage";
 
 import AdminDashboard from "@pages/admin/AdminDashboard";
-import AdminProductsDash from "@pages/admin/AdminProductDash";
+import AdminProductsDash from "@pages/admin/product-dash/AdminProductDash";
 import AdminCatalogDash from "@pages/admin/AdminCatalogDash";
 import AdminOrdersDash from "@pages/admin/AdminOrdersDash";
 import AdminUsersDash from "@pages/admin/AdminUsersDash";

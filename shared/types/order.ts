@@ -57,6 +57,7 @@ export type TransactionStatus =
 
 export const PaymentMethods = {
   CARD: "CARD",
+  STRIPE: "STRIPE",
   PAYPAL: "PAYPAL",
   SQUARE: "SQUARE",
   CASH: "CASH",

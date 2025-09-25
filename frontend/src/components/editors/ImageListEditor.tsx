@@ -6,7 +6,7 @@ import "yet-another-react-lightbox/styles.css";
 import { Zoom } from "yet-another-react-lightbox/plugins";
 
 // Components
-import CropDialog from "../dialogs/CropDialog";
+import CropDialog from "@components/dialogs/CropDialog";
 import { processImageOnly } from "@utils/image-processing";
 import type { ProductImageSet } from "@shared/types/Product";
 

@@ -2,6 +2,8 @@ import { useMemo } from "react";
 import { useAuth } from "@contexts/auth/AuthContext";
 import axios from "axios";
 
+import type { CRUDInterface } from "@shared/types/crud-interface";
+
 import type {
   Product,
   ProductTagPreset,
@@ -12,6 +14,7 @@ import type {
 import type { User } from "@shared/types/User";
 import type { Collection, Category } from "@shared/types/Catalog";
 import type { Order } from "@shared/types/Order";
+import type { QueryObject } from "@shared/types/QueryObject";
 
 const API_BASE = import.meta.env.VITE_API_URL;
 
@@ -56,17 +59,17 @@ export function useApi() {
   const { token } = useAuth();
 
   return useMemo(() => {
-    const createResource = <T extends { id?: string }, Q = any>(
-      name: string
-    ) => ({
+    const CRUD = <T extends { id?: string }>(
+      name: string,
+      token?: string
+    ): CRUDInterface<T> => ({
       create: (data: Partial<T>) => post<T>(`${API_BASE}/${name}`, data, token),
-      getAll: (query?: Q) =>
+      get: (id: string) => get<T | null>(`${API_BASE}/${name}/${id}`, token),
+      getAll: (query?: QueryObject) =>
         get<{ data: T[]; total: number }>(`${API_BASE}/${name}`, token, query),
-      get: (id: string | number) => get<T>(`${API_BASE}/${name}/${id}`, token),
-      update: (data: T) =>
-        put<T>(`${API_BASE}/${name}/${data.id}`, data, token),
-      delete: (id: string | number, data?: any) =>
-        del<T>(`${API_BASE}/${name}/${id}`, token, data),
+      update: (updates: Partial<T> & { id: string }) =>
+        put<T>(`${API_BASE}/${name}/${updates.id}`, updates, token),
+      delete: (id: string) => del<T>(`${API_BASE}/${name}/${id}`, token),
     });
 
     return {
@@ -76,19 +79,17 @@ export function useApi() {
       },
 
       // CRUD resources
-      users: createResource<User>("users"),
-      products: createResource<Product>("products"),
-      productOptionsPresets: createResource<ProductOptionsPreset>(
+      users: CRUD<User>("users"),
+      products: CRUD<Product>("products"),
+      productOptionsPresets: CRUD<ProductOptionsPreset>(
         "products/options-presets"
       ),
-      productTagsPresets: createResource<ProductTagPreset>(
-        "products/tags-presets"
-      ),
-      productVariants: createResource<ProductVariant>("products/variants"),
-      productReviews: createResource<ProductReview>("products/reviews"),
-      collections: createResource<Collection>("catalog/collections"),
-      categories: createResource<Category>("catalog/categories"),
-      orders: createResource<Order>("orders"),
+      productTagsPresets: CRUD<ProductTagPreset>("products/tags-presets"),
+      productVariants: CRUD<ProductVariant>("products/variants"),
+      productReviews: CRUD<ProductReview>("products/reviews"),
+      collections: CRUD<Collection>("catalog/collections"),
+      categories: CRUD<Category>("catalog/categories"),
+      orders: CRUD<Order>("orders"),
 
       // file uploads
       uploadImage: (file: Blob, filename: string) => {

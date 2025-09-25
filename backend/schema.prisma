@@ -66,6 +66,7 @@ enum TransactionStatus {
 
 enum PaymentMethod {
   CARD
+  STRIPE
   PAYPAL
   SQUARE
   CASH

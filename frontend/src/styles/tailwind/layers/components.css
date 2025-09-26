@@ -47,7 +47,12 @@
   }
 
   .btn-normal {
-    @apply btn border bg-surfaceAlt border-border text-text active:bg-primary;
+    @apply btn border bg-surfaceAlt border-border text-text active:bg-primary active:border-primary active:text-buttonText;
+  }
+
+  .btn-normal-active {
+    @apply btn border bg-surfaceAlt border-border text-buttonText bg-primary border-primary;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   }
 
   .btn-cancel {

@@ -6,7 +6,7 @@ import AppRoutes from "./routes/AppRoutes";
 import { applyTheme } from "./theme";
 
 export default function App() {
-  applyTheme("dark");
+  applyTheme("light");
 
   return (
     <div>

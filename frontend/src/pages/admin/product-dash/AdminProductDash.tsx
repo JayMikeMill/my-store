@@ -43,7 +43,7 @@ export default function AdminProductsDash() {
         objectsName="Products"
         headerButton={
           <button
-            className="btn-primary whitespace-nowrap"
+            className="btn-normal whitespace-nowrap"
             onClick={() => setIsAdding(true)}
           >
             Add Product

@@ -16,8 +16,8 @@ export default function AdminUsersDash() {
   };
 
   const handleSaveOrder = async (update: Partial<Order>) => {
-    if (!editingOrder) return;
-    await orders.update({ ...editingOrder, ...update });
+    if (!editingOrder || !editingOrder.id) return;
+    await orders.update({ ...editingOrder, ...update, id: editingOrder.id });
   };
 
   return (

@@ -78,7 +78,7 @@ const ProductOptionsEditor: React.FC<ProductOptionsEditorProps> = ({
       }
       openInitially={openInitially}
     >
-      <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-2 w-full">
         {/* Preset Dropdown */}
         <OptionsPresetDropdown
           localOptions={localOptions}
@@ -90,7 +90,7 @@ const ProductOptionsEditor: React.FC<ProductOptionsEditorProps> = ({
         {localOptions.map((opt, i) => (
           <div
             key={i}
-            className="p-2 flex flex-col gap-2 w-full max-w-full border-b border-border pb-2"
+            className="flex flex-col gap-2 py-4 border-t border-border"
           >
             <div className="flex flex-wrap gap-2 items-center w-full">
               <input

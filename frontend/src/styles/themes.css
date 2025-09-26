@@ -3,8 +3,8 @@
 ============================ */
 :root {
   /* Core colors */
-  --color-primary: #3b82f6; /* Tailwind Blue-500 */
-  --color-primary-dark: #1e40af; /* Tailwind Blue-800 */
+  --color-primary: #85b4ff; /* Tailwind Blue-500 */
+  --color-primary-dark: #7885b0; /* Tailwind Blue-800 */
   --color-secondary: #f59e0b; /* Amber-500 */
   --color-secondary-dark: #b45309; /* Amber-700 */
   --color-accent: #ec4899; /* Pink-500 */

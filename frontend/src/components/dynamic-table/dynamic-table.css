@@ -11,12 +11,12 @@
 /* Table header */
 .table thead th {
   @apply font-semibold uppercase text-center text-sm px-md py-sm
-   border-b border-divider cursor-pointer sticky top-0 z-10 bg-secondary
+   border-b border-divider cursor-pointer sticky top-0 z-10 bg-primary
    text-text transition-colors duration-200;
 }
 
 .table thead th.sortable:hover {
-  @apply bg-accent;
+  @apply bg-secondary;
 }
 
 /* Table body rows */
@@ -39,16 +39,6 @@
 /* Table cells */
 .table td {
   @apply px-md py-sm border-r border-divider text-center break-words;
-}
-
-/* Sticky action column */
-.table td.actions {
-  @apply flex flex-col gap-2 items-center justify-start sticky left-0 z-20 bg-backgroundAlt px-sm;
-}
-
-/* Buttons inside table actions */
-.table td.actions .btn {
-  @apply w-full;
 }
 
 /* Pagination */

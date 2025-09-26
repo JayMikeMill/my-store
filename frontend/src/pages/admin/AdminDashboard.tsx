@@ -2,8 +2,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "@contexts/auth/AuthContext";
 
 function navButtonClass(isActive: boolean) {
-  return `px-md py-sm w-[120px] text-center rounded-md border border-border font-semibold text-text bg-card-bg transition-all duration-200 
-    ${isActive ? "bg-primary text-text border-border" : "hover:bg-backgroundAlt hover:-translate-y-0.5 hover:shadow-md"}`;
+  return isActive ? "btn-normal-active" : "btn-normal";
 }
 
 export default function AdminDashboard() {
@@ -21,7 +20,7 @@ export default function AdminDashboard() {
 
       {/* Navigation */}
 
-      <nav className="flex gap-4 p-2 border-b border-border overflow-x-auto whitespace-nowrap">
+      <nav className="flex gap-2 p-2 border-b border-border overflow-x-auto whitespace-nowrap">
         <NavLink
           to="/admin/products-dash"
           className={({ isActive }) => navButtonClass(isActive)}

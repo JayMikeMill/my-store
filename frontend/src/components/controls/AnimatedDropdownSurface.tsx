@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 interface DropdownProps {
+  className?: string;
   label: React.ReactNode;
   children: React.ReactNode;
   openInitially?: boolean;
@@ -9,6 +10,7 @@ interface DropdownProps {
 }
 
 const AnimatedDropdownSurface: React.FC<DropdownProps> = ({
+  className,
   label,
   children,
   openInitially = false,
@@ -41,11 +43,12 @@ const AnimatedDropdownSurface: React.FC<DropdownProps> = ({
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             onAnimationStart={() => setOverflow(false)} // hide overflow only when collapsing
-            onAnimationComplete={() => setOverflow(open)} // show overflow when open
+            onAnimationComplete={() => setOverflow(open)}
+            onAnimationEnd={() => setOverflow(open)}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className={`${overflow ? "overflow-visible" : "overflow-hidden"}`}
           >
-            <div className="p-4 flex flex-col gap-2">{children}</div>
+            <div className={`p-4 flex flex-col ${className}`}>{children}</div>
           </motion.div>
         )}
       </AnimatePresence>

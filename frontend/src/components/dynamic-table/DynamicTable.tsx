@@ -21,7 +21,6 @@ export interface DynamicTableProps<T> {
   fetchPage: (query?: QueryObject) => Promise<{ data: T[]; total: number }>;
   searchable?: boolean;
   onRowClick?: (row: T) => void;
-  actions?: (row: T) => ReactNode;
   headerButton?: ReactNode;
   objectsName?: string;
 }
@@ -32,7 +31,6 @@ export default function DynamicTable<T extends { id?: string }>({
   fetchPage,
   searchable = true,
   onRowClick,
-  actions,
   headerButton: button,
   objectsName = "Objects",
 }: DynamicTableProps<T>) {
@@ -130,7 +128,6 @@ export default function DynamicTable<T extends { id?: string }>({
           <table className="table w-full">
             <thead>
               <tr>
-                {actions && <th className="actions w-[120px]">Actions</th>}
                 {columns.map((col) => (
                   <th
                     key={col.id}
@@ -160,7 +157,6 @@ export default function DynamicTable<T extends { id?: string }>({
                   key={row.id}
                   onClick={() => onRowClick?.(structuredClone(row))}
                 >
-                  {actions && <td className="actions">{actions(row)}</td>}
                   {columns.map((col) => (
                     <td
                       key={col.id}

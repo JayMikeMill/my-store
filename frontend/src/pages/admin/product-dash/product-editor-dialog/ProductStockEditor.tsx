@@ -61,6 +61,7 @@ const ProductStockEditor: React.FC<ProductStockEditorProps> = ({
 
   return (
     <AnimatedDropdownSurface
+      className="pt-0 pb-2"
       label={
         <div className="flex items-center justify-between w-full pr-4">
           <span className="text-lg font-semibold text-text">
@@ -90,7 +91,7 @@ const ProductStockEditor: React.FC<ProductStockEditorProps> = ({
       {localVariants.map((variant, idx) => (
         <div
           key={idx}
-          className="flex justify-between items-center w-full border-b border-border pr-8 pb-2"
+          className="flex justify-between items-center w-full border-b border-border pr-8 py-2"
         >
           <div className="flex flex-wrap gap-1 mt-1">
             {parseVariantOptions(variant).map((opt, optIdx) => (

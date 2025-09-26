@@ -10,6 +10,18 @@ import { XButton } from "@components/controls/CustomControls";
 import type { Product, ProductImageSet } from "@shared/types/Product";
 import { useApi } from "@api/useApi";
 
+const emptyProduct: Product = {
+  name: "",
+  price: 0,
+  description: "",
+  stock: 0,
+  options: [],
+  variants: [],
+  tags: [],
+  images: [],
+  discount: "",
+};
+
 interface ProductDialogProps {
   product: Product | null;
   open: boolean;
@@ -23,18 +35,9 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
   onSave,
   onCancel,
 }) => {
-  const [localProduct, setLocalProduct] = useState<Product>({
-    name: "",
-    price: 0,
-    description: "",
-    stock: 0,
-    options: [],
-    variants: [],
-    tags: [],
-    images: [],
-    discount: "",
-  });
+  const [localProduct, setLocalProduct] = useState<Product>(emptyProduct);
 
+  const [isAdding, setIsAdding] = useState(false);
   const [isProcessingImages, setIsProcessingImages] = useState(false);
   const [isSavingProduct, setIsSavingProduct] = useState(false);
   const [discountValue, setDiscountValue] = useState(0);
@@ -48,8 +51,13 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
       setLocalProduct((prev) => ({ ...prev, id: undefined }));
     }
 
-    if (!product) return;
+    if (!product) {
+      setLocalProduct(emptyProduct);
+      setIsAdding(true);
+      return;
+    }
 
+    setIsAdding(false);
     setLocalProduct(product);
 
     if (product.discount) {
@@ -146,17 +154,17 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
     }
   };
 
-  if (!localProduct.id) return null;
+  if (!isAdding && !localProduct.id) return null;
 
   return (
     <AnimatedDialog
       open={open}
       onClose={onCancel ?? (() => {})}
-      className="dialog-box pl-2 w-full h-full sm:h-[90vh] sm:max-w-4xl flex flex-col overflow-hidden px-2 sm:px-8"
+      className="dialog-box rounded-none sm:rounded-2xl pl-2 w-full h-full sm:h-[90vh] sm:max-w-4xl flex flex-col overflow-hidden px-2 sm:px-8"
     >
-      <div className="flex items-center justify-between pt-4 pb-2 flex-shrink-0">
-        <h2 className="text-2xl font-bold text-text text-center flex-1">
-          {localProduct.id ? "Edit Product" : "Add Product"}
+      <div className="flex items-center justify-between pt-4 pb-2 flex-shrink-0 pl-4">
+        <h2 className="text-2xl font-bold text-text text-left  flex-1">
+          {isAdding ? "Add Product" : "Edit Product"}
         </h2>
         <XButton
           className="w-8 h-8"
@@ -167,15 +175,16 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col flex-1 overflow-hidden gap-lg"
+        className="flex flex-col flex-1 overflow-hidden border-t"
       >
-        <div className="flex flex-1 flex-col md:flex-row gap-md overflow-hidden min-h-0">
-          <div className="flex-1 flex flex-col gap-md px-2 overflow-y-auto">
+        <div className="flex flex-1 flex-col sm:flex-row sm:gap-md overflow-hidden min-h-0">
+          <div className="flex-1 flex flex-col gap-md px-2 overflow-y-auto py-4">
             {/* Name */}
             <label className="flex flex-col gap-1 text-sm font-semibold text-textSecondary">
               Name
               <input
                 type="text"
+                placeholder="Product Name"
                 value={localProduct.name}
                 onChange={(e) =>
                   setLocalProduct((prev) => ({ ...prev, name: e.target.value }))
@@ -195,6 +204,8 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
                   </span>
                   <input
                     type="number"
+                    min={0}
+                    onFocus={(e) => e.target.select()}
                     value={localProduct.price}
                     onChange={(e) =>
                       setLocalProduct((prev) => ({
@@ -218,6 +229,8 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
                     </span>
                     <input
                       type="number"
+                      min={0}
+                      onFocus={(e) => e.target.select()}
                       className="input-box pl-6 pr-md py-1 h-8 w-full"
                       value={discountValue}
                       onChange={(e) =>
@@ -232,8 +245,12 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
                   value={discountType}
                   onChange={(e) => setDiscountType(e.target.value as "%" | "$")}
                 >
-                  <option value="%">%</option>
-                  <option value="$">$</option>
+                  <option value="%" className="text-center">
+                    %
+                  </option>
+                  <option value="$" className="text-center">
+                    $
+                  </option>
                 </select>
               </div>
             </div>
@@ -243,6 +260,7 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
               Description
               <textarea
                 value={localProduct.description}
+                placeholder="Product Description"
                 onChange={(e) =>
                   setLocalProduct((prev) => ({
                     ...prev,
@@ -283,7 +301,7 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
           </div>
 
           {/* Image Editor */}
-          <div className="md:w-1/3 flex flex-col gap-md flex-shrink-0">
+          <div className=" flex flex-col gap-md flex-shrink-0  sm:w-1/3 sm:py-4">
             <ImageListEditor
               images={localProduct.images ?? []}
               onImagesChange={(imgs) =>
@@ -295,7 +313,7 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
         </div>
 
         {/* Footer Buttons */}
-        <div className="w-full flex flex-row items-center gap-2 px-4 sm:px-8 py-4 border-t border-border flex-shrink-0">
+        <div className="w-full flex flex-row items-center gap-2 px-4 sm:px-8 py-4  border-border flex-shrink-0">
           <button
             className="btn-cancel w-full h-12"
             type="button"

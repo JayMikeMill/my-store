@@ -129,7 +129,7 @@ const ImageListEditor: React.FC<ImageListEditorProps> = ({
   };
 
   return (
-    <div className="input-box flex gap-2 p-2 overflow-x-auto h-[120px] flex-nowrap items-center md:grid md:grid-cols-2 md:auto-rows-min md:h-full md:overflow-y-auto">
+    <div className="input-box flex gap-2 p-2 overflow-x-auto h-[120px] flex-nowrap items-center sm:grid sm:grid-cols-2 sm:auto-rows-min sm:h-full sm:overflow-y-auto">
       {pendingCropFile && (
         <CropDialog
           file={pendingCropFile}
@@ -140,15 +140,24 @@ const ImageListEditor: React.FC<ImageListEditorProps> = ({
         />
       )}
 
-      <Lightbox
-        open={lightboxIndex !== null}
-        close={() => setLightboxIndex(null)}
-        slides={images.map((img) => ({ src: img.main }))}
-        index={lightboxIndex ?? 0}
-        plugins={[Zoom]}
-        styles={{ container: { backgroundColor: "rgba(0,0,0,0.5)" } }}
-        zoom={{ scrollToZoom: true, maxZoomPixelRatio: 2 }}
-      />
+      {lightboxIndex !== null && (
+        <div
+          onClick={(e) => e.stopPropagation()}
+          onPointerDown={(e) => e.preventDefault()} // stops pointer-based form triggers
+          style={{ position: "fixed", inset: 0, zIndex: 9999 }}
+        >
+          <Lightbox
+            open
+            close={() => setLightboxIndex(null)}
+            slides={images.map((img) => ({ src: img.main }))}
+            index={lightboxIndex ?? 0}
+            plugins={[Zoom]}
+            styles={{ container: { backgroundColor: "rgba(0,0,0,0.5)" } }}
+            controller={{ closeOnBackdropClick: true }}
+            portal={{ root: document.body }}
+          />
+        </div>
+      )}
 
       {images.map((img, index) => (
         <div

@@ -81,7 +81,7 @@ const OptionsPresetDropdown: React.FC<OptionsPresetDropdownProps> = ({
       items={dropdownItems}
       headerText="Select Preset..."
       noItemsText="No option presets."
-      className="max-w-sm mb-2"
+      className="mb-2"
     />
   );
 };

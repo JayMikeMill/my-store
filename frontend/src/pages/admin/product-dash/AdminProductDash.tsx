@@ -1,7 +1,7 @@
 // Admin product dashboard page
 import { useState, useEffect } from "react";
 import type { Product } from "@shared/types/Product";
-import ProductEditorDialog from "@pages/admin/product-dash/product-editor-dialog/ProductEditorDialog";
+import { ProductEditorDialog } from "@pages/admin/product-dash/product-editor-dialog/ProductEditorDialog";
 import { useApi } from "@api/useApi";
 import DynamicTable from "@components/dynamic-table/DynamicTable";
 

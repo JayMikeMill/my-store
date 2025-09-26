@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState } from "react";
 import { AnimatedDialog } from "@components/controls/AnimatedDialog";
+import { HexColorPicker } from "react-colorful";
 
 interface ProductTagDialogProps {
   name: string;
@@ -15,7 +15,7 @@ interface ProductTagDialogProps {
 export const ProductTagDialog: React.FC<ProductTagDialogProps> = ({
   name,
   setName,
-  color,
+  color = "#aabbcc",
   setColor,
   open,
   onClose,
@@ -33,12 +33,12 @@ export const ProductTagDialog: React.FC<ProductTagDialogProps> = ({
       </h3>
 
       <div className="flex gap-2 mb-4">
-        <input
-          type="color"
-          value={color}
-          onChange={(e) => setColor(e.target.value)}
-          className="w-16 h-10 border border-border rounded cursor-pointer"
+        <ColorPickerButton
+          color={color}
+          onChange={setColor}
+          className="w-12 h-8 rounded-md border border-gray-400 shadow-sm"
         />
+
         <input
           type="text"
           placeholder="Tag Name"
@@ -49,13 +49,48 @@ export const ProductTagDialog: React.FC<ProductTagDialogProps> = ({
       </div>
 
       <div className="flex gap-2 justify-center">
-        <button type="button" className="btn-plain w-1/2" onClick={onClose}>
+        <button type="button" className="btn-cancel w-1/2" onClick={onClose}>
           Cancel
         </button>
-        <button type="button" className="btn-success w-1/2" onClick={onSave}>
+        <button type="button" className="btn-normal w-1/2" onClick={onSave}>
           Save
         </button>
       </div>
     </AnimatedDialog>
   );
 };
+
+interface ColorPickerButtonProps {
+  color: string;
+  onChange: (color: string) => void;
+  className?: string;
+}
+
+export function ColorPickerButton({
+  color,
+  onChange,
+  className,
+}: ColorPickerButtonProps) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      {/* The button */}
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className={className}
+        style={{ backgroundColor: color }}
+      />
+
+      {/* Dialog */}
+      <AnimatedDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        className="p-2"
+      >
+        <HexColorPicker color={color} onChange={onChange} />
+      </AnimatedDialog>
+    </>
+  );
+}

@@ -109,7 +109,7 @@ const TagPresetsDropdown: React.FC<TagPresetsDropdownProps> = ({
       {/* Create Tag Button */}
       <button
         type="button"
-        className="btn-primary px-3 py-1 whitespace-nowrap"
+        className="btn-normal px-3 py-1 whitespace-nowrap"
         onClick={() => setCreating(true)}
       >
         Create Tag
@@ -134,11 +134,13 @@ const TagPresetsDropdown: React.FC<TagPresetsDropdownProps> = ({
 interface ProductTagsEditorProps {
   product: Product;
   setProduct: React.Dispatch<React.SetStateAction<Product>>;
+  openInitially?: boolean; // parent controls visibility
 }
 
 const ProductTagsEditor: React.FC<ProductTagsEditorProps> = ({
   product,
   setProduct,
+  openInitially = false,
 }) => {
   const [localTags, setLocalTags] = useState<ProductTag[]>(product.tags || []);
 
@@ -163,6 +165,7 @@ const ProductTagsEditor: React.FC<ProductTagsEditorProps> = ({
       label={
         <span className="text-lg font-semibold text-text">Product Tags</span>
       }
+      openInitially={openInitially}
     >
       <div className="flex flex-col px-2">
         <TagPresetsDropdown onSelectPreset={addTag} />
@@ -171,14 +174,13 @@ const ProductTagsEditor: React.FC<ProductTagsEditorProps> = ({
           {localTags.map((tag, i) => (
             <div
               key={i}
-              className="flex items-center gap-2 py-1.5 pr-3 rounded-full items-middle justify-middle"
+              className="flex items-center gap-2 py-0.5 pr-1 rounded-md items-middle justify-middle"
               style={{ backgroundColor: tag.color || "#ccc", color: "#fff" }}
             >
-              <span className="text-center ml-4">{tag.name}YOOO</span>
-              <XButton
-                className="w-5 h-5 justify-left"
-                onClick={() => removeTag(i)}
-              />
+              <span className="text-center font-bold font-font ml-3">
+                {tag.name}
+              </span>
+              <XButton className="w-5 h-5" onClick={() => removeTag(i)} />
             </div>
           ))}
         </div>

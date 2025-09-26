@@ -39,8 +39,12 @@
     @apply btn bg-danger border-border text-buttonText;
   }
 
-  .btn-plain {
-    @apply btn border border-border text-text;
+  .btn-normal {
+    @apply btn border bg-surfaceAlt border-border text-text active:bg-primary;
+  }
+
+  .btn-cancel {
+    @apply btn border border-border text-text active:bg-surfaceAlt;
   }
 
   .btn-info {

@@ -10,11 +10,13 @@ import AnimatedDropdownSurface from "@components/controls/AnimatedDropdownSurfac
 interface ProductStockEditorProps {
   product: Product;
   setProduct: React.Dispatch<React.SetStateAction<Product>>;
+  openInitially?: boolean; // control visibility
 }
 
 const ProductStockEditor: React.FC<ProductStockEditorProps> = ({
   product,
   setProduct,
+  openInitially = false,
 }) => {
   const hasVariants = !!product.options?.length;
   const [localVariants, setLocalVariants] = useState<ProductVariant[]>([]);
@@ -82,6 +84,7 @@ const ProductStockEditor: React.FC<ProductStockEditorProps> = ({
           />
         </div>
       }
+      openInitially={openInitially}
       disabled={!hasVariants}
     >
       {localVariants.map((variant, idx) => (

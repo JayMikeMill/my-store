@@ -1,32 +1,28 @@
 // src/components/ProductDialog.tsx
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ImageListEditor from "@components/editors/ImageListEditor";
 import ProductOptionsEditor from "./ProductOptionsEditor";
 import ProductStockEditor from "./ProductStockEditor";
 import ProductTagsEditor from "./ProductTagsEditor";
-import { AnimatedDialog } from "@components/controls/AnimatedDialog"; // <-- import the superclass
-
-import type {
-  Product,
-  ProductTag,
-  ProductImageSet,
-} from "@shared/types/Product";
-import { useApi } from "@api/useApi";
+import { AnimatedDialog } from "@components/controls/AnimatedDialog";
 import { XButton } from "@components/controls/CustomControls";
 
+import type { Product, ProductImageSet } from "@shared/types/Product";
+import { useApi } from "@api/useApi";
+
 interface ProductDialogProps {
-  product: Product | null; // If null, we are adding a new product
-  open: boolean; // parent controls visibility
-  onSave: () => void; // Callback to close dialog
-  onCancel: () => void; // Optional cancel callback
+  product: Product | null;
+  open: boolean;
+  onSave: () => void;
+  onCancel?: () => void;
 }
 
-export default function ProductEditorDialog({
+export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
   product,
   open,
   onSave,
   onCancel,
-}: ProductDialogProps) {
+}) => {
   const [localProduct, setLocalProduct] = useState<Product>(
     product || {
       name: "",
@@ -44,15 +40,11 @@ export default function ProductEditorDialog({
   const [isSavingProduct, setIsSavingProduct] = useState(false);
   const [discountValue, setDiscountValue] = useState(0);
   const [discountType, setDiscountType] = useState<"%" | "$">("%");
-  const [tagString, setTagString] = useState("");
 
   const { products, uploadImage } = useApi();
 
   useEffect(() => {
     if (!product) return;
-
-    setLocalProduct(product);
-    setTagString(product.tags?.map((t) => t.name).join(", ") || "");
 
     if (product.discount) {
       if (product.discount.includes("%")) {
@@ -66,7 +58,9 @@ export default function ProductEditorDialog({
       setDiscountType("%");
       setDiscountValue(0);
     }
-  }, [product]);
+
+    setLocalProduct(product);
+  });
 
   const handleDelete = async () => {
     if (!product) return onSave();
@@ -84,12 +78,19 @@ export default function ProductEditorDialog({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const tagsArray: ProductTag[] = tagString
-        .split(",")
-        .map((tag) => ({ name: tag.trim() }))
-        .filter((tag) => tag.name !== "");
+    if (!localProduct.images || localProduct.images.length === 0) {
+      alert("At least one image is required");
+      return;
+    }
 
+    if (isProcessingImages) {
+      alert("Please wait for images to finish processing.");
+      return;
+    }
+
+    setIsSavingProduct(true);
+
+    try {
       const discountString =
         discountValue > 0
           ? discountType === "%"
@@ -97,22 +98,10 @@ export default function ProductEditorDialog({
             : `${discountValue}`
           : "";
 
-      if (!localProduct.images || localProduct.images.length === 0) {
-        alert("At least one image is required");
-        return;
-      }
-
-      if (isProcessingImages) {
-        alert("Please wait for images to finish processing.");
-        return;
-      }
-
-      setIsSavingProduct(true);
-
       const uploadedImages: ProductImageSet[] = [];
+
       for (const img of localProduct.images) {
-        const isBlob = img.main.startsWith("blob:");
-        if (isBlob) {
+        if (img.main.startsWith("blob:")) {
           const blobM = await fetch(img.main).then((r) => r.blob());
           const blobP = await fetch(img.preview).then((r) => r.blob());
           const blobT = await fetch(img.thumbnail).then((r) => r.blob());
@@ -133,7 +122,6 @@ export default function ProductEditorDialog({
 
       const productToSave: Product = {
         ...localProduct,
-        tags: tagsArray,
         discount: discountString,
         images: uploadedImages,
       };
@@ -152,43 +140,38 @@ export default function ProductEditorDialog({
     }
   };
 
+  console.log("Rendering ProductEditorDialog", { localProduct });
   return (
     <AnimatedDialog
       open={open}
-      onClose={onCancel}
-      className="dialog-box w-full h-full sm:h-[90vh] sm:max-w-4xl flex flex-col overflow-hidden px-2 sm:px-8"
+      onClose={onCancel ?? (() => {})}
+      className="dialog-box pl-2 w-full h-full sm:h-[90vh] sm:max-w-4xl flex flex-col overflow-hidden px-2 sm:px-8"
     >
-      {/* Header */}
       <div className="flex items-center justify-between pt-4 pb-2 flex-shrink-0">
         <h2 className="text-2xl font-bold text-text text-center flex-1">
           {product ? "Edit Product" : "Add Product"}
         </h2>
         <XButton
           className="w-8 h-8"
-          onClick={onCancel}
+          onClick={onCancel ?? (() => {})}
           aria-label="Close dialog"
         />
       </div>
 
-      {/* Form */}
       <form
         onSubmit={handleSubmit}
         className="flex flex-col flex-1 overflow-hidden gap-lg"
       >
         <div className="flex flex-1 flex-col md:flex-row gap-md overflow-hidden min-h-0">
-          {/* Left/Top */}
-          <div className="px-1 flex-1 flex flex-col gap-md overflow-y-auto">
-            {/* Name, price, discount, description */}
+          <div className="flex-1 flex flex-col gap-md px-2 overflow-y-auto">
+            {/* Name, Price, Discount, Description */}
             <label className="flex flex-col gap-1 text-sm font-semibold text-textSecondary">
               Name
               <input
                 type="text"
                 value={localProduct.name}
                 onChange={(e) =>
-                  setLocalProduct((prev) => ({
-                    ...prev,
-                    name: e.target.value,
-                  }))
+                  setLocalProduct((prev) => ({ ...prev, name: e.target.value }))
                 }
                 required
                 className="input-box px-md py-1 h-8 text-text"
@@ -262,24 +245,25 @@ export default function ProductEditorDialog({
               />
             </label>
 
-            {/* Editors */}
             <div className="flex flex-col gap-4">
               <ProductTagsEditor
                 product={localProduct}
                 setProduct={setLocalProduct}
+                openInitially={true}
               />
               <ProductOptionsEditor
                 product={localProduct}
                 setProduct={setLocalProduct}
+                openInitially={true}
               />
               <ProductStockEditor
                 product={localProduct}
                 setProduct={setLocalProduct}
+                openInitially={true}
               />
             </div>
           </div>
 
-          {/* Right / Images */}
           <div className="md:w-1/3 flex flex-col gap-md flex-shrink-0">
             <ImageListEditor
               images={localProduct.images || []}
@@ -291,10 +275,9 @@ export default function ProductEditorDialog({
           </div>
         </div>
 
-        {/* Form Buttons */}
         <div className="w-full grid grid-cols-2 gap-2 px-4 sm:px-8 py-4 border-t border-border sm:grid-cols-4 flex-shrink-0">
           <button
-            className="btn-danger w-full h-12"
+            className="btn-cancel w-full h-12"
             type="button"
             onClick={handleDelete}
           >
@@ -302,7 +285,7 @@ export default function ProductEditorDialog({
           </button>
           <button
             type="submit"
-            className="btn-success w-full h-12 whitespace-nowrap"
+            className="btn-normal w-full h-12 whitespace-nowrap"
             disabled={isProcessingImages || isSavingProduct}
           >
             {isSavingProduct
@@ -317,4 +300,4 @@ export default function ProductEditorDialog({
       </form>
     </AnimatedDialog>
   );
-}
+};

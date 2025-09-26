@@ -8,11 +8,13 @@ import { XButton } from "@components/controls/CustomControls";
 interface ProductOptionsEditorProps {
   product: Product;
   setProduct: React.Dispatch<React.SetStateAction<Product>>;
+  openInitially?: boolean; // control visibility
 }
 
 const ProductOptionsEditor: React.FC<ProductOptionsEditorProps> = ({
   product,
   setProduct,
+  openInitially = false,
 }) => {
   const { productOptionsPresets } = useApi();
   const [localOptions, setLocalOptions] = useState<ProductOption[]>(
@@ -74,6 +76,7 @@ const ProductOptionsEditor: React.FC<ProductOptionsEditorProps> = ({
       label={
         <span className="text-lg font-semibold text-text">Product Options</span>
       }
+      openInitially={openInitially}
     >
       <div className="flex flex-col gap-4 p-4">
         {/* Preset Dropdown */}
@@ -115,14 +118,14 @@ const ProductOptionsEditor: React.FC<ProductOptionsEditorProps> = ({
         <div className="flex flex-wrap gap-2 w-full mt-auto">
           <button
             type="button"
-            className="btn-primary px-3 py-2 flex-shrink-0"
+            className="btn-normal px-3 py-2 flex-shrink-0"
             onClick={addOption}
           >
             Add Option
           </button>
           <button
             type="button"
-            className="btn-secondary px-3 py-2 flex-shrink-0 ml-auto"
+            className="btn-normal px-3 py-2 flex-shrink-0 ml-auto"
             onClick={handleSavePreset}
             disabled={saving}
           >

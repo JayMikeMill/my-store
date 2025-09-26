@@ -11,12 +11,14 @@ import { processImageOnly } from "@utils/image-processing";
 import type { ProductImageSet } from "@shared/types/Product";
 
 interface ImageListEditorProps {
+  className?: string;
   images: ProductImageSet[];
   onImagesChange: (images: ProductImageSet[]) => void;
   setIsProcessingImages: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ImageListEditor: React.FC<ImageListEditorProps> = ({
+  className,
   images,
   onImagesChange,
   setIsProcessingImages,
@@ -129,7 +131,11 @@ const ImageListEditor: React.FC<ImageListEditorProps> = ({
   };
 
   return (
-    <div className="input-box flex gap-2 p-2 overflow-x-auto h-[120px] flex-nowrap items-center sm:grid sm:grid-cols-2 sm:auto-rows-min sm:h-full sm:overflow-y-auto">
+    <div
+      className={`input-box flex gap-2 p-2 overflow-x-auto h-[120px] 
+      flex-nowrap items-center sm:grid sm:grid-cols-2 sm:auto-rows-min 
+      sm:h-full sm:overflow-y-auto ${className}`}
+    >
       {pendingCropFile && (
         <CropDialog
           file={pendingCropFile}

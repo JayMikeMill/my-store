@@ -11,6 +11,7 @@ import type { Product, ProductImageSet } from "@shared/types/Product";
 import { useApi } from "@api/useApi";
 
 const emptyProduct: Product = {
+  id: undefined,
   name: "",
   price: 0,
   description: "",
@@ -48,7 +49,9 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
   // Sync local product when dialog opens
   useEffect(() => {
     if (!open) {
-      setLocalProduct((prev) => ({ ...prev, id: undefined }));
+      setLocalProduct(emptyProduct);
+      setIsAdding(false);
+      return;
     }
 
     if (!product) {
@@ -73,6 +76,14 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
       setDiscountValue(0);
     }
   }, [open, product]);
+
+  const handleCancel = () => {
+    setLocalProduct(emptyProduct);
+    setIsAdding(false);
+    setDiscountValue(0);
+    setDiscountType("%");
+    onCancel?.();
+  };
 
   const handleDelete = async () => {
     if (!localProduct.id) return onSave();
@@ -154,12 +165,17 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
     }
   };
 
+  console.log("Rendering ProductEditorDialog", {
+    open,
+    isAdding,
+    localProduct,
+  });
   if (!isAdding && !localProduct.id) return null;
 
   return (
     <AnimatedDialog
       open={open}
-      onClose={onCancel ?? (() => {})}
+      onClose={handleCancel}
       className="dialog-box rounded-none sm:rounded-2xl pl-2 w-full h-full sm:h-[90vh] sm:max-w-4xl flex flex-col overflow-hidden px-2 sm:px-8"
     >
       <div className="flex items-center justify-between pt-4 pb-2 flex-shrink-0 pl-4">
@@ -178,7 +194,8 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
         className="flex flex-col flex-1 overflow-hidden border-t"
       >
         <div className="flex flex-1 flex-col sm:flex-row sm:gap-md overflow-hidden min-h-0">
-          <div className="flex-1 flex flex-col gap-md px-2 overflow-y-auto py-4">
+          {/* Main Editor */}
+          <div className="flex-1 flex flex-col gap-md px-2 overflow-y-auto py-4 sm:border sm:rounded-lg sm:mt-4">
             {/* Name */}
             <label className="flex flex-col gap-1 text-sm font-semibold text-textSecondary">
               Name
@@ -301,8 +318,12 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
           </div>
 
           {/* Image Editor */}
-          <div className=" flex flex-col gap-md flex-shrink-0  sm:w-1/3 sm:py-4">
+          <div className=" flex flex-col flex-shrink-0  sm:w-1/3 sm:border-t sm:border sm:mt-4">
+            <span className="text-xl font-semibold text-text text-center rounded-t-sm py-2 hidden hidden sm:block">
+              Product Images
+            </span>
             <ImageListEditor
+              className="sm:border-0"
               images={localProduct.images ?? []}
               onImagesChange={(imgs) =>
                 setLocalProduct((prev) => ({ ...prev, images: imgs }))
@@ -313,11 +334,11 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
         </div>
 
         {/* Footer Buttons */}
-        <div className="w-full flex flex-row items-center gap-2 px-4 sm:px-8 py-4  border-border flex-shrink-0">
+        <div className="w-full flex flex-row gap-2 px-4 sm:px-40 items-center py-4 border-border flex-shrink-0">
           <button
             className="btn-cancel w-full h-12"
             type="button"
-            onClick={onCancel ?? (() => {})}
+            onClick={handleCancel}
           >
             Cancel
           </button>

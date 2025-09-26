@@ -12,15 +12,15 @@ export default function AdminDashboard() {
     <div className="flex flex-col w-full max-w-full font-sans bg-background">
       {/* Header */}
       <header className="flex justify-between items-center border-b border-border flex-shrink-0 px-2 py-3">
-        <h1 className="text-3xl text-text">Dashboard</h1>
-        <button onClick={logout} className="btn-danger">
+        <h1 className="text-3xl text-text ">Dashboard</h1>
+        <button onClick={logout} className="btn-normal">
           Logout
         </button>
       </header>
 
       {/* Navigation */}
 
-      <nav className="flex gap-2 p-2 border-b border-border overflow-x-auto whitespace-nowrap">
+      <nav className="flex gap-2 p-2 py-4 border-b border-border overflow-x-auto whitespace-nowrap">
         <NavLink
           to="/admin/products-dash"
           className={({ isActive }) => navButtonClass(isActive)}

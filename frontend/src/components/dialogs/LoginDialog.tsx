@@ -25,11 +25,14 @@ export default function LoginDialog({ onClose }: LoginDialogProps) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
-      <div className="dialog-box w-full max-w-md flex flex-col gap-xl">
-        <h2 className="text-2xl font-bold mb-lg text-center text-text">
+      <div className="dialog-box w-full max-w-md flex flex-col gap-md p-lg m-md">
+        <h2 className="text-2xl font-bold text-center text-text">
           Admin Login
         </h2>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-lg">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-md sm:gap-lg"
+        >
           <label className="flex flex-col gap-xs text-base font-semibold text-textSecondary">
             <span className="mb-xs">Email</span>
             <input
@@ -52,10 +55,7 @@ export default function LoginDialog({ onClose }: LoginDialogProps) {
               autoComplete="current-password"
             />
           </label>
-          <button
-            type="submit"
-            className="mt-lg bg-primary text-white py-md rounded-lg font-semibold shadow-lg hover:bg-primaryDark transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-          >
+          <button type="submit" className="btn-normal">
             Login
           </button>
           {error && (

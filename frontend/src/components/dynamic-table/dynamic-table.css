@@ -10,9 +10,9 @@
 
 /* Table header */
 .table thead th {
-  @apply font-semibold uppercase text-center text-sm px-md py-sm
-   border-b border-divider cursor-pointer sticky top-0 z-10 bg-primary
-   text-text transition-colors duration-200;
+  @apply font-bold uppercase text-center text-sm px-md py-sm 
+   border-b border-l border-divider cursor-pointer sticky top-0 z-10 bg-primary
+   text-buttonText transition-colors duration-200;
 }
 
 .table thead th.sortable:hover {
@@ -30,10 +30,6 @@
 
 .table tbody tr:nth-child(odd) {
   @apply bg-backgroundAlt;
-}
-
-.table tbody tr:hover {
-  @apply bg-surface;
 }
 
 /* Table cells */

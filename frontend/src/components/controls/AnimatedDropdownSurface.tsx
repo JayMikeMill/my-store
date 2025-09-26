@@ -9,7 +9,7 @@ interface DropdownProps {
   disabled?: boolean;
 }
 
-const AnimatedDropdown: React.FC<DropdownProps> = ({
+const AnimatedDropdownSurface: React.FC<DropdownProps> = ({
   label,
   children,
   openInitially = false,
@@ -18,6 +18,7 @@ const AnimatedDropdown: React.FC<DropdownProps> = ({
   const [open, setOpen] = useState(openInitially);
   const contentRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState("0px");
+  const [animationDone, setAnimationDone] = useState(false);
 
   useEffect(() => {
     if (disabled) {
@@ -45,7 +46,9 @@ const AnimatedDropdown: React.FC<DropdownProps> = ({
   const rounding = open ? "rounded-t-md" : "rounded-md";
 
   return (
-    <div className={`border  border-border ${rounding} w-full max-w-full`}>
+    <div
+      className={`border  border-border ${rounding} w-full max-w-full overflow-visible`}
+    >
       <button
         type="button"
         className={`flex justify-between items-center ${rounding} w-full px-4 py-2 bg-surfaceAlt text-text font-semibold ${
@@ -65,7 +68,10 @@ const AnimatedDropdown: React.FC<DropdownProps> = ({
             animate={{ height, opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="overflow-hidden"
+            onAnimationEnd={() => setAnimationDone(true)}
+            onAnimationComplete={() => setAnimationDone(true)}
+            onAnimationStart={() => setAnimationDone(false)}
+            className={animationDone ? "overflow-visible" : "overflow-hidden"}
             ref={contentRef}
           >
             <div className="p-4 flex flex-col gap-2">{children}</div>
@@ -76,4 +82,4 @@ const AnimatedDropdown: React.FC<DropdownProps> = ({
   );
 };
 
-export default AnimatedDropdown;
+export default AnimatedDropdownSurface;

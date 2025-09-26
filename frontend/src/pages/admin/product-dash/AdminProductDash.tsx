@@ -8,25 +8,32 @@ import DynamicTable from "@components/dynamic-table/DynamicTable";
 export default function AdminProductsDash() {
   const [isAdding, setIsAdding] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
   const [tableKey, setTableKey] = useState(0);
 
   const getProducts = useApi().products.getAll;
 
-  const handleDialogClose = () => {
+  const handleDialogSave = () => {
     setIsAdding(false);
     setEditingProduct(null);
     setTableKey((prev) => prev + 1);
   };
 
+  const handleDialogCancel = () => {
+    setIsAdding(false);
+    setEditingProduct(null);
+  };
+
   return (
     <div className="pt-lg pb-lg">
       {/* Product dialog */}
-      {(isAdding || editingProduct) && (
-        <ProductEditorDialog
-          product={editingProduct}
-          onClose={handleDialogClose}
-        />
-      )}
+
+      <ProductEditorDialog
+        product={editingProduct}
+        onSave={handleDialogSave}
+        onCancel={handleDialogCancel}
+        open={editingProduct !== null || isAdding}
+      />
 
       {/* Product list */}
 

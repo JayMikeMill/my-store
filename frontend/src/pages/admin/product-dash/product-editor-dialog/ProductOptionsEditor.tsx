@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import type { Product, ProductOption } from "@shared/types/Product";
-import AnimatedDropdown from "@components/controls/AnimatedDropdown";
-import OptionsPresetDropdown from "@components/controls/ProductOptionsPresetsDropdown";
+import AnimatedDropdownSurface from "@components/controls/AnimatedDropdownSurface";
+import OptionsPresetDropdown from "@pages/admin/product-dash/product-editor-dialog/ProductOptionsPresetsDropdown";
 import { useApi } from "@api/useApi";
+import { XButton } from "@components/controls/CustomControls";
 
 interface ProductOptionsEditorProps {
   product: Product;
@@ -69,7 +70,7 @@ const ProductOptionsEditor: React.FC<ProductOptionsEditorProps> = ({
   };
 
   return (
-    <AnimatedDropdown
+    <AnimatedDropdownSurface
       label={
         <span className="text-lg font-semibold text-text">Product Options</span>
       }
@@ -96,13 +97,7 @@ const ProductOptionsEditor: React.FC<ProductOptionsEditorProps> = ({
                 onChange={(e) => updateOptionName(i, e.target.value)}
                 className="input-box flex-1 min-w-0 px-2 py-1"
               />
-              <button
-                type="button"
-                className="btn-circle-x"
-                onClick={() => removeOption(i)}
-              >
-                X
-              </button>
+              <XButton onClick={() => removeOption(i)} />
             </div>
             <div className="flex flex-wrap gap-2 items-center w-full">
               <input
@@ -135,7 +130,7 @@ const ProductOptionsEditor: React.FC<ProductOptionsEditorProps> = ({
           </button>
         </div>
       </div>
-    </AnimatedDropdown>
+    </AnimatedDropdownSurface>
   );
 };
 

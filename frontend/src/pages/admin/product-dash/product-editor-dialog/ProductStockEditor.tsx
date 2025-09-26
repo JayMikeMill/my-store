@@ -5,7 +5,7 @@ import {
   type ProductOption,
   type ProductVariant,
 } from "@shared/types/Product";
-import Dropdown from "@components/controls/AnimatedDropdown";
+import AnimatedDropdownSurface from "@components/controls/AnimatedDropdownSurface";
 
 interface ProductStockEditorProps {
   product: Product;
@@ -58,7 +58,7 @@ const ProductStockEditor: React.FC<ProductStockEditorProps> = ({
   };
 
   return (
-    <Dropdown
+    <AnimatedDropdownSurface
       label={
         <div className="flex items-center justify-between w-full pr-4">
           <span className="text-lg font-semibold text-text">
@@ -112,7 +112,7 @@ const ProductStockEditor: React.FC<ProductStockEditorProps> = ({
           />
         </div>
       ))}
-    </Dropdown>
+    </AnimatedDropdownSurface>
   );
 };
 

@@ -156,7 +156,10 @@ export default function DynamicTable<T extends { id?: string }>({
             </thead>
             <tbody>
               {pageData.map((row) => (
-                <tr key={row.id} onClick={() => onRowClick?.(row)}>
+                <tr
+                  key={row.id}
+                  onClick={() => onRowClick?.(structuredClone(row))}
+                >
                   {actions && <td className="actions">{actions(row)}</td>}
                   {columns.map((col) => (
                     <td

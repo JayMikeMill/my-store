@@ -23,18 +23,17 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
   onSave,
   onCancel,
 }) => {
-  const [localProduct, setLocalProduct] = useState<Product>(
-    product || {
-      name: "",
-      price: 0,
-      description: "",
-      stock: 0,
-      options: [],
-      variants: [],
-      tags: [],
-      images: [],
-    }
-  );
+  const [localProduct, setLocalProduct] = useState<Product>({
+    name: "",
+    price: 0,
+    description: "",
+    stock: 0,
+    options: [],
+    variants: [],
+    tags: [],
+    images: [],
+    discount: "",
+  });
 
   const [isProcessingImages, setIsProcessingImages] = useState(false);
   const [isSavingProduct, setIsSavingProduct] = useState(false);
@@ -43,8 +42,15 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
 
   const { products, uploadImage } = useApi();
 
+  // Sync local product when dialog opens
   useEffect(() => {
+    if (!open) {
+      setLocalProduct((prev) => ({ ...prev, id: undefined }));
+    }
+
     if (!product) return;
+
+    setLocalProduct(product);
 
     if (product.discount) {
       if (product.discount.includes("%")) {
@@ -58,20 +64,17 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
       setDiscountType("%");
       setDiscountValue(0);
     }
-
-    setLocalProduct(product);
-  });
+  }, [open, product]);
 
   const handleDelete = async () => {
-    if (!product) return onSave();
-    if (!product.id) return alert("Product ID is missing.");
+    if (!localProduct.id) return onSave();
 
     const confirmed = window.confirm(
-      `Are you sure you want to delete ${product.name}?`
+      `Are you sure you want to delete ${localProduct.name}?`
     );
     if (!confirmed) return;
 
-    await products.delete(product.id);
+    await products.delete(localProduct.id);
     onSave();
   };
 
@@ -126,8 +129,11 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
         images: uploadedImages,
       };
 
-      if (product?.id) {
-        await products.update({ ...productToSave, id: product.id });
+      if (localProduct.id) {
+        await products.update({
+          ...productToSave,
+          id: localProduct.id as string,
+        });
       } else {
         await products.create(productToSave);
       }
@@ -140,7 +146,8 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
     }
   };
 
-  console.log("Rendering ProductEditorDialog", { localProduct });
+  if (!localProduct.id) return null;
+
   return (
     <AnimatedDialog
       open={open}
@@ -149,7 +156,7 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
     >
       <div className="flex items-center justify-between pt-4 pb-2 flex-shrink-0">
         <h2 className="text-2xl font-bold text-text text-center flex-1">
-          {product ? "Edit Product" : "Add Product"}
+          {localProduct.id ? "Edit Product" : "Add Product"}
         </h2>
         <XButton
           className="w-8 h-8"
@@ -164,7 +171,7 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
       >
         <div className="flex flex-1 flex-col md:flex-row gap-md overflow-hidden min-h-0">
           <div className="flex-1 flex flex-col gap-md px-2 overflow-y-auto">
-            {/* Name, Price, Discount, Description */}
+            {/* Name */}
             <label className="flex flex-col gap-1 text-sm font-semibold text-textSecondary">
               Name
               <input
@@ -178,6 +185,7 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
               />
             </label>
 
+            {/* Price & Discount */}
             <div className="flex gap-md items-end">
               <label className="flex-1 flex flex-col gap-1 text-sm font-semibold text-textSecondary">
                 Price
@@ -230,6 +238,7 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
               </div>
             </div>
 
+            {/* Description */}
             <label className="pb-0.5 flex flex-col gap-1 text-sm font-semibold text-textSecondary">
               Description
               <textarea
@@ -245,6 +254,7 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
               />
             </label>
 
+            {/* Editors */}
             <div className="flex flex-col gap-4">
               <ProductTagsEditor
                 product={localProduct}
@@ -262,11 +272,20 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
                 openInitially={true}
               />
             </div>
+
+            <button
+              className="btn-danger h-12"
+              type="button"
+              onClick={onCancel ?? (() => {})}
+            >
+              Delete Product
+            </button>
           </div>
 
+          {/* Image Editor */}
           <div className="md:w-1/3 flex flex-col gap-md flex-shrink-0">
             <ImageListEditor
-              images={localProduct.images || []}
+              images={localProduct.images ?? []}
               onImagesChange={(imgs) =>
                 setLocalProduct((prev) => ({ ...prev, images: imgs }))
               }
@@ -275,13 +294,14 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
           </div>
         </div>
 
-        <div className="w-full grid grid-cols-2 gap-2 px-4 sm:px-8 py-4 border-t border-border sm:grid-cols-4 flex-shrink-0">
+        {/* Footer Buttons */}
+        <div className="w-full flex flex-row items-center gap-2 px-4 sm:px-8 py-4 border-t border-border flex-shrink-0">
           <button
             className="btn-cancel w-full h-12"
             type="button"
-            onClick={handleDelete}
+            onClick={onCancel ?? (() => {})}
           >
-            Delete
+            Cancel
           </button>
           <button
             type="submit"
@@ -292,7 +312,7 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
               ? "Saving..."
               : isProcessingImages
                 ? "Processing Images..."
-                : product
+                : localProduct.id
                   ? "Save Changes"
                   : "Add Product"}
           </button>

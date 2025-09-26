@@ -17,8 +17,8 @@ const AnimatedDropdownSurface: React.FC<DropdownProps> = ({
 }) => {
   const [open, setOpen] = useState(openInitially);
   const contentRef = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState("0px");
-  const [animationDone, setAnimationDone] = useState(false);
+  const [height, setHeight] = useState(openInitially ? "auto" : "0px");
+  const [overflow, setOverflow] = useState<boolean>(openInitially);
 
   useEffect(() => {
     if (disabled) {
@@ -28,6 +28,11 @@ const AnimatedDropdownSurface: React.FC<DropdownProps> = ({
 
   useEffect(() => {
     if (!contentRef.current) return;
+
+    if (openInitially) {
+      // Skip animation on first render
+      return;
+    }
 
     if (open) {
       setHeight(`${contentRef.current.scrollHeight}px`);
@@ -68,10 +73,10 @@ const AnimatedDropdownSurface: React.FC<DropdownProps> = ({
             animate={{ height, opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            onAnimationEnd={() => setAnimationDone(true)}
-            onAnimationComplete={() => setAnimationDone(true)}
-            onAnimationStart={() => setAnimationDone(false)}
-            className={animationDone ? "overflow-visible" : "overflow-hidden"}
+            onAnimationEnd={() => setOverflow(true)}
+            onAnimationComplete={() => setOverflow(true)}
+            onAnimationStart={() => setOverflow(false)}
+            className={overflow ? "overflow-visible" : "overflow-hidden"}
             ref={contentRef}
           >
             <div className="p-4 flex flex-col gap-2">{children}</div>

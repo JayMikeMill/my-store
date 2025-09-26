@@ -15,5 +15,8 @@
     "prisma-push": "npm --prefix backend run prisma:push",
     "prisma-migrate": "npm --prefix backend run prisma:migrate",
     "test": "jest"
+  },
+  "dependencies": {
+    "react-colorful": "^5.6.1"
   }
 }

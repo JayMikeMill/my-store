@@ -27,7 +27,6 @@ export default function AdminProductsDash() {
   return (
     <div className="pt-lg pb-lg">
       {/* Product dialog */}
-
       <ProductEditorDialog
         product={editingProduct}
         onSave={handleDialogSave}
@@ -64,7 +63,10 @@ export default function AdminProductsDash() {
                   />
                 </div>
               ) : (
-                <div className="w-20 h-20 flex items-center justify-center bg-light rounded text-xs">
+                <div
+                  className="w-20 h-20 flex items-center justify-center 
+                    bg-light rounded text-xs"
+                >
                   No Image
                 </div>
               ),

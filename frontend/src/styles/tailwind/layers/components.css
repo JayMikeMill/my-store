@@ -10,10 +10,13 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* custom subtle shadow */
   }
 
-  .btn:hover {
-    @apply -translate-y-0.5;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover {
+      @apply -translate-y-0.5;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    }
   }
+
   .btn:active {
     @apply -translate-y-1;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);

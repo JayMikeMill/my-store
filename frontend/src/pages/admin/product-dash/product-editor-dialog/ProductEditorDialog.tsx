@@ -274,9 +274,9 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
             </div>
 
             <button
-              className="btn-danger h-12"
+              className="btn-normal h-12"
               type="button"
-              onClick={onCancel ?? (() => {})}
+              onClick={handleDelete}
             >
               Delete Product
             </button>

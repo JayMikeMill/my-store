@@ -8,16 +8,16 @@ export default function AdminCatalogPageWrapper() {
       {/* Secondary Catalog Navigation */}
       <nav className="flex gap-2 p-2 py-4 border-b border-border overflow-x-auto whitespace-nowrap">
         <NavLink
-          to="collections"
-          className={({ isActive }) => NavButton(isActive)}
-        >
-          Collections
-        </NavLink>
-        <NavLink
           to="categories"
           className={({ isActive }) => NavButton(isActive)}
         >
           Categories
+        </NavLink>
+        <NavLink
+          to="collections"
+          className={({ isActive }) => NavButton(isActive)}
+        >
+          Collections
         </NavLink>
       </nav>
 

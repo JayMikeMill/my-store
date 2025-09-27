@@ -150,7 +150,7 @@ model Collection {
   slug        String              @unique
   description String?
   seo         Json?
-  images      CollectionImageSet?
+  images      Json?
   products    Product[]           @relation("ProductCollections")
 }
 
@@ -160,17 +160,10 @@ model Category {
   slug        String              @unique
   description String?
   seo         Json?
+  images      Json?
   products    Product[]           @relation("ProductCategories")
 }
 
-model CollectionImageSet {
-  id          Int        @id @default(autoincrement())
-  banner      String
-  preview     String
-  thumbnail   String
-  collection  Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
-  collectionId String     @unique
-}
 
 //////////////////////
 // PRODUCTS
@@ -189,11 +182,11 @@ model Product {
   dimensions    ProductDimensions?
   tags          ProductTag[]
   images        ProductImageSet[]
-  options       ProductOption[]
-  reviews       ProductReview[]
-  variants      ProductVariant[]
+  options       Json?
+  variants      Json?
   categories    Category[]         @relation("ProductCategories")
   collections   Collection[]       @relation("ProductCollections")
+  reviews       ProductReview[]
 }
 
 model ProductImageSet {
@@ -211,37 +204,6 @@ model ProductTag {
   productId String
   name      String
   color     String?
-}
-
-model ProductOption {
-  id         String             @id @default(uuid())
-  product    Product            @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId  String
-  name       String
-  values     String
-}
-
-model ProductOptionsPreset {
-  id       String               @id @default(uuid())
-  name     String
-  options  ProductOptionPreset[]
-}
-
-model ProductOptionPreset {
-	id        String                @id @default(uuid())
-	preset    ProductOptionsPreset  @relation(fields: [presetId], references: [id], onDelete: Cascade)
-	presetId  String
-	name      String
-	values    String
-}
-
-model ProductVariant {
-  id            String   @id @default(uuid())
-  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId     String
-  options       String   @unique
-  priceOverride Float?
-  stock         Int
 }
 
 model ProductDimensions {
@@ -265,15 +227,16 @@ model ProductReview {
   createdAt DateTime @default(now())
 }
 
-//////////////////////
-// PRODUCT PRESETS
-//////////////////////
-
-
 model ProductTagPreset {
   id    String @id @default(uuid())
   name  String
   color String?
+}
+
+model ProductOptionsPreset {
+  id       String               @id @default(uuid())
+  name     String
+  options  Json
 }
 
 //////////////////////

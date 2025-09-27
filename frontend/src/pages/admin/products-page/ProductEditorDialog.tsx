@@ -1,13 +1,20 @@
 // src/components/ProductDialog.tsx
 import React, { useState, useEffect } from "react";
-import ImageListEditor from "@components/editors/ImageListEditor";
-import ProductOptionsEditor from "./ProductOptionsEditor";
-import ProductStockEditor from "./ProductStockEditor";
-import ProductTagsEditor from "./ProductTagsEditor";
+
+// UI Components
 import { AnimatedDialog } from "@components/controls/AnimatedDialog";
 import { XButton } from "@components/controls/CustomControls";
 
+// Types
 import type { Product, ProductImageSet } from "@shared/types/Product";
+
+// Editors
+import ProductOptionsEditor from "./ProductOptionsEditor";
+import ProductStockEditor from "./ProductStockEditor";
+import ProductTagsEditor from "./ProductTagsEditor";
+import ProductImagesEditor from "./ProductImagesEditor";
+
+// API
 import { useApi } from "@api/useApi";
 
 const emptyProduct: Product = {
@@ -48,17 +55,18 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
 
   // Sync local product when dialog opens
   useEffect(() => {
+    // Closing dialog
     if (!open) {
-      setLocalProduct(emptyProduct);
-      setIsAdding(false);
+      clearProduct();
       return;
-    }
-
-    if (!product) {
-      setLocalProduct(emptyProduct);
+      // Adding new product
+    } else if (!product) {
+      clearProduct();
       setIsAdding(true);
       return;
     }
+
+    // Editing existing product
 
     setIsAdding(false);
     setLocalProduct(product);
@@ -78,11 +86,15 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
   }, [open, product]);
 
   const handleCancel = () => {
+    clearProduct();
+    onCancel?.();
+  };
+
+  const clearProduct = () => {
     setLocalProduct(emptyProduct);
-    setIsAdding(false);
     setDiscountValue(0);
     setDiscountType("%");
-    onCancel?.();
+    setIsAdding(false);
   };
 
   const handleDelete = async () => {
@@ -158,6 +170,7 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
       }
 
       setIsSavingProduct(false);
+      clearProduct();
       onSave();
     } catch (err: any) {
       setIsSavingProduct(false);
@@ -170,25 +183,16 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
     isAdding,
     localProduct,
   });
-  if (!isAdding && !localProduct.id) return null;
+
+  const shouldRender = isAdding || localProduct.id != undefined;
 
   return (
     <AnimatedDialog
-      open={open}
+      title={isAdding ? "Add Product" : "Edit Product"}
+      open={shouldRender}
       onClose={handleCancel}
       className="dialog-box rounded-none sm:rounded-2xl pl-2 w-full h-full sm:h-[90vh] sm:max-w-4xl flex flex-col overflow-hidden px-2 sm:px-8"
     >
-      <div className="flex items-center justify-between pt-4 pb-2 flex-shrink-0 pl-4">
-        <h2 className="text-2xl font-bold text-text text-left  flex-1">
-          {isAdding ? "Add Product" : "Edit Product"}
-        </h2>
-        <XButton
-          className="w-8 h-8"
-          onClick={onCancel ?? (() => {})}
-          aria-label="Close dialog"
-        />
-      </div>
-
       <form
         onSubmit={handleSubmit}
         className="flex flex-col flex-1 overflow-hidden border-t"
@@ -322,7 +326,7 @@ export const ProductEditorDialog: React.FC<ProductDialogProps> = ({
             <span className="text-xl font-semibold text-text text-center rounded-t-sm py-2 hidden hidden sm:block">
               Product Images
             </span>
-            <ImageListEditor
+            <ProductImagesEditor
               className="sm:border-0"
               images={localProduct.images ?? []}
               onImagesChange={(imgs) =>

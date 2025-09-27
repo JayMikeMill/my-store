@@ -1,11 +1,8 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "@contexts/auth/AuthContext";
+import { NavButton } from "@components/controls/CustomControls";
 
-function navButtonClass(isActive: boolean) {
-  return isActive ? "btn-normal-active" : "btn-normal";
-}
-
-export default function AdminDashboard() {
+export default function AdminDashboardPage() {
   const { logout } = useAuth();
 
   return (
@@ -22,32 +19,32 @@ export default function AdminDashboard() {
 
       <nav className="flex gap-2 p-2 py-4 border-b border-border overflow-x-auto whitespace-nowrap">
         <NavLink
-          to="/admin/products-dash"
-          className={({ isActive }) => navButtonClass(isActive)}
+          to="/admin/products"
+          className={({ isActive }) => NavButton(isActive)}
         >
           Products
         </NavLink>
         <NavLink
-          to="/admin/catalog-dash"
-          className={({ isActive }) => navButtonClass(isActive)}
+          to="/admin/catalog"
+          className={({ isActive }) => NavButton(isActive)}
         >
           Catalog
         </NavLink>
         <NavLink
-          to="/admin/orders-dash"
-          className={({ isActive }) => navButtonClass(isActive)}
+          to="/admin/orders"
+          className={({ isActive }) => NavButton(isActive)}
         >
           Orders
         </NavLink>
         <NavLink
-          to="/admin/users-dash"
-          className={({ isActive }) => navButtonClass(isActive)}
+          to="/admin/users"
+          className={({ isActive }) => NavButton(isActive)}
         >
           Users
         </NavLink>
         <NavLink
-          to="/admin/settings-dash"
-          className={({ isActive }) => navButtonClass(isActive)}
+          to="/admin/settings"
+          className={({ isActive }) => NavButton(isActive)}
         >
           Settings
         </NavLink>

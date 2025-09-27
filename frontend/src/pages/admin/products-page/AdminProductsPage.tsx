@@ -1,11 +1,11 @@
 // Admin product dashboard page
 import { useState, useEffect } from "react";
 import type { Product } from "@shared/types/Product";
-import { ProductEditorDialog } from "@pages/admin/product-dash/product-editor-dialog/ProductEditorDialog";
+import { ProductEditorDialog } from "@pages/admin/products-page/ProductEditorDialog";
 import { useApi } from "@api/useApi";
 import DynamicTable from "@components/dynamic-table/DynamicTable";
 
-export default function AdminProductsDash() {
+export default function AdminProductsPage() {
   const [isAdding, setIsAdding] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
@@ -28,10 +28,10 @@ export default function AdminProductsDash() {
     <div className="pt-lg pb-lg">
       {/* Product dialog */}
       <ProductEditorDialog
+        open={editingProduct !== null || isAdding}
         product={editingProduct}
         onSave={handleDialogSave}
         onCancel={handleDialogCancel}
-        open={editingProduct !== null || isAdding}
       />
 
       {/* Product list */}

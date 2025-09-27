@@ -1,7 +1,9 @@
 import React, { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { XButton } from "./CustomControls";
 
 interface AnimatedDialogProps {
+  title: string;
   open: boolean;
   onClose: () => void;
   children: React.ReactNode;
@@ -10,6 +12,7 @@ interface AnimatedDialogProps {
 }
 
 export const AnimatedDialog: React.FC<AnimatedDialogProps> = ({
+  title,
   open,
   onClose,
   children,
@@ -81,6 +84,16 @@ export const AnimatedDialog: React.FC<AnimatedDialogProps> = ({
             exit={{ scale: 0.9, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
+            <div className="flex items-center justify-between border-b mx-2 pt-4 pb-2 flex-shrink-0 pl-4">
+              <h2 className="text-2xl font-bold text-text text-left  flex-1">
+                {title}
+              </h2>
+              <XButton
+                className="w-8 h-8"
+                onClick={onClose}
+                aria-label="Close dialog"
+              />
+            </div>
             {children}
           </motion.div>
         </motion.div>

@@ -18,9 +18,9 @@ import { DBAdapter } from "./DBAdapter";
 export class PrismaDBAdapter implements DBAdapter {
   public products: ProductCRUD;
   public productTagsPresets: ProductTagPresetCRUD;
-  public productReviews: ProductReviewCRUD;
-  public productVariants: ProductVariantCRUD;
   public productOptionsPresets: ProductOptionPresetCRUD;
+  public productReviews: ProductReviewCRUD;
+
   public categories: CategoryCRUD;
   public collections: CollectionCRUD;
   public orders: OrderCRUD;
@@ -29,9 +29,9 @@ export class PrismaDBAdapter implements DBAdapter {
   constructor(prismaClient: PrismaClient = new PrismaClient()) {
     this.products = new ProductCRUD(prismaClient);
     this.productTagsPresets = new ProductTagPresetCRUD(prismaClient);
-    this.productReviews = new ProductReviewCRUD(prismaClient);
-    this.productVariants = new ProductVariantCRUD(prismaClient);
     this.productOptionsPresets = new ProductOptionPresetCRUD(prismaClient);
+    this.productReviews = new ProductReviewCRUD(prismaClient);
+
     this.categories = new CategoryCRUD(prismaClient);
     this.collections = new CollectionCRUD(prismaClient);
     this.orders = new OrderCRUD(prismaClient);
@@ -47,9 +47,7 @@ class ProductCRUD extends PrismaCRUDAdapter<Product> {
       fields: {
         images: { type: "upsertNested" },
         tags: { type: "upsertNested" },
-        options: { type: "upsertNested" },
-        variants: { type: "upsertNested" },
-        //dimensions: { type: "upsert" },
+        dimensions: { type: "upsertNested" },
         categories: { type: "set" },
         collections: { type: "set" },
         //reviews: { type: "createNested" },
@@ -57,26 +55,12 @@ class ProductCRUD extends PrismaCRUDAdapter<Product> {
 
       include: {
         images: true,
-        options: true,
         tags: true,
-        //dimensions: true,
+        dimensions: true,
         categories: true,
         collections: true,
-        variants: true,
         //reviews: true,
       },
-    });
-  }
-}
-
-class ProductOptionPresetCRUD extends PrismaCRUDAdapter<ProductOptionsPreset> {
-  constructor(prismaClient: PrismaClient) {
-    super(prismaClient, {
-      model: "productOptionsPreset",
-      fields: {
-        options: { type: "upsertNested" },
-      },
-      include: { options: true },
     });
   }
 }
@@ -87,9 +71,9 @@ class ProductTagPresetCRUD extends PrismaCRUDAdapter<ProductTagPreset> {
   }
 }
 
-class ProductVariantCRUD extends PrismaCRUDAdapter<ProductVariant> {
+class ProductOptionPresetCRUD extends PrismaCRUDAdapter<ProductOptionsPreset> {
   constructor(prismaClient: PrismaClient) {
-    super(prismaClient, { model: "productVariant" });
+    super(prismaClient, { model: "productOptionsPreset" });
   }
 }
 
@@ -107,13 +91,7 @@ class CategoryCRUD extends PrismaCRUDAdapter<Category> {
 
 class CollectionCRUD extends PrismaCRUDAdapter<Collection> {
   constructor(prismaClient: PrismaClient) {
-    super(prismaClient, {
-      model: "collection",
-      include: { images: true },
-      fields: {
-        images: { type: "upsertNested" }, // assuming collections have nested images
-      },
-    });
+    super(prismaClient, { model: "collection" });
   }
 }
 

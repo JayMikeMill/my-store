@@ -5,7 +5,7 @@ import type { Order } from "@shared/types/Order";
 import DynamicTable from "@components/dynamic-table/DynamicTable";
 import OrderDialog from "@components/dialogs/OrderDialog";
 
-export default function AdminOrdersDash() {
+export default function AdminOrdersPage() {
   const [editingOrder, setEditingOrder] = useState<Order | null>(null);
   const [tableKey, setTableKey] = useState(0);
 
@@ -17,7 +17,11 @@ export default function AdminOrdersDash() {
 
   const handleSaveOrder = async (update: Partial<Order>) => {
     if (!editingOrder || !editingOrder.id) return;
-    await orders.update({ ...editingOrder, ...update });
+    await orders.update({
+      ...editingOrder,
+      ...update,
+      id: editingOrder.id as string,
+    });
   };
 
   return (

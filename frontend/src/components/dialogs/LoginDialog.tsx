@@ -1,12 +1,14 @@
 // src/components/LoginDialog.tsx
 import { useState } from "react";
 import { useAuth } from "@contexts/auth/AuthContext";
+import { AnimatedDialog } from "@components/controls/AnimatedDialog";
 
 interface LoginDialogProps {
+  open: boolean;
   onClose?: () => void; // Optional callback if you want to close dialog manually
 }
 
-export default function LoginDialog({ onClose }: LoginDialogProps) {
+export default function LoginDialog({ open, onClose }: LoginDialogProps) {
   const { login } = useAuth();
   const [email, setEmail] = useState("aptotekinfo@gmail.com");
   const [password, setPassword] = useState("aptotek2025");
@@ -24,45 +26,44 @@ export default function LoginDialog({ onClose }: LoginDialogProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
-      <div className="dialog-box w-full max-w-md flex flex-col gap-md p-lg m-md">
-        <h2 className="text-2xl font-bold text-center text-text">
-          Admin Login
-        </h2>
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col gap-md sm:gap-lg"
-        >
-          <label className="flex flex-col gap-xs text-base font-semibold text-textSecondary">
-            <span className="mb-xs">Email</span>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="input-box px-lg py-md"
-              autoComplete="username"
-            />
-          </label>
-          <label className="flex flex-col gap-xs text-base font-semibold text-textSecondary">
-            <span className="mb-xs">Password</span>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="input-box px-lg py-md"
-              autoComplete="current-password"
-            />
-          </label>
-          <button type="submit" className="btn-normal">
-            Login
-          </button>
-          {error && (
-            <p className="text-error text-base text-center mt-xs">{error}</p>
-          )}
-        </form>
-      </div>
-    </div>
+    <AnimatedDialog
+      title="Admin Login"
+      open={open}
+      onClose={onClose || (() => {})}
+    >
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-md sm:gap-lg p-md w-auto"
+      >
+        <label className="flex flex-col gap-xs text-base font-semibold text-textSecondary">
+          <span className="mb-xs">Email</span>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="input-box px-lg py-md"
+            autoComplete="username"
+          />
+        </label>
+        <label className="flex flex-col gap-xs text-base font-semibold text-textSecondary">
+          <span className="mb-xs">Password</span>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="input-box px-lg py-md"
+            autoComplete="current-password"
+          />
+        </label>
+        <button type="submit" className="btn-normal">
+          Login
+        </button>
+        {error && (
+          <p className="text-error text-base text-center mt-xs">{error}</p>
+        )}
+      </form>
+    </AnimatedDialog>
   );
 }

@@ -1,12 +1,12 @@
 // Collection is now the base
 export interface Collection {
-  id: string;
+  id?: string;
   parentId?: string;
   name: string;
   slug: string;
+  images?: CollectionImageSet;
   description?: string;
   seo?: { title?: string; metaDescription?: string; keywords?: string[] };
-  images?: CollectionImageSet;
 }
 
 // Category extends Collection

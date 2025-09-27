@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import type { Product, ProductOption } from "@shared/types/Product";
-import AnimatedDropdownSurface from "@components/controls/AnimatedDropdownSurface";
-import OptionsPresetDropdown from "@pages/admin/product-dash/product-editor-dialog/ProductOptionsPresetsDropdown";
+
 import { useApi } from "@api/useApi";
 import { XButton } from "@components/controls/CustomControls";
+
+import AnimatedDropdownSurface from "@components/controls/AnimatedDropdownSurface";
+import OptionsPresetDropdown from "./ProductOptionsPresetsDropdown";
 
 interface ProductOptionsEditorProps {
   product: Product;

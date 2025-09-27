@@ -1,16 +1,21 @@
+import { AnimatedDialog } from "@components/controls/AnimatedDialog";
 import React, { useState } from "react";
 import Cropper from "react-easy-crop";
 
 interface CropDialogProps {
-  file: File;
+  open: boolean;
+  file: File | null;
   onCropComplete: (croppedBlob: Blob, previewUrl: string) => void;
   onCancel: () => void;
+  ratio?: number; // default 1 (square)
 }
 
 const CropDialog: React.FC<CropDialogProps> = ({
+  open,
   file,
   onCropComplete,
   onCancel,
+  ratio = 1,
 }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -18,6 +23,10 @@ const CropDialog: React.FC<CropDialogProps> = ({
   const [imageUrl, setImageUrl] = useState<string>("");
 
   React.useEffect(() => {
+    if (!file) {
+      setImageUrl("");
+      return;
+    }
     const reader = new FileReader();
     reader.onload = () => setImageUrl(reader.result as string);
     reader.readAsDataURL(file);
@@ -69,11 +78,13 @@ const CropDialog: React.FC<CropDialogProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/40 dark:bg-black/60">
+    <AnimatedDialog
+      title="Crop Image"
+      open={open}
+      onClose={onCancel}
+      className="dialog-box p-md flex flex-col w-[360px] sm:w-[400px] max-h-[90vh] overflow-hidden"
+    >
       <div className="dialog-box p-md flex flex-col w-[360px] sm:w-[400px] max-h-[90vh] overflow-hidden">
-        <h2 className="text-xl font-bold text-center text-text mb-sm">
-          Crop Image
-        </h2>
         <div className="relative w-full h-80 mb-sm border-2 border-border rounded-md overflow-hidden bg-background">
           {imageUrl && (
             <Cropper
@@ -118,7 +129,7 @@ const CropDialog: React.FC<CropDialogProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </AnimatedDialog>
   );
 };
 

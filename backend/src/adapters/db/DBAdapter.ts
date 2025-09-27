@@ -13,9 +13,8 @@ import { User } from "@shared/types/User";
 
 export interface DBAdapter {
   products: CRUDInterface<Product>;
-  productOptionsPresets: CRUDInterface<ProductOptionsPreset>;
   productTagsPresets: CRUDInterface<ProductTagPreset>;
-  productVariants: CRUDInterface<ProductVariant>;
+  productOptionsPresets: CRUDInterface<ProductOptionsPreset>;
   productReviews: CRUDInterface<ProductReview>;
 
   categories: CRUDInterface<Category>;

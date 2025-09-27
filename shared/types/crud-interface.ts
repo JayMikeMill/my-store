@@ -1,4 +1,4 @@
-import { QueryObject } from "./QueryObject";
+import type { QueryObject } from "./QueryObject";
 
 export interface CRUDInterface<T> {
   create(data: Partial<T>): Promise<T>;

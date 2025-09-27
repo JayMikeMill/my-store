@@ -11,8 +11,10 @@
   "private": true,
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
-    "build-types": "npm --prefix backend run prisma:generate",
+    "prisma-gen": "npm --prefix backend run prisma:generate",
     "prisma-push": "npm --prefix backend run prisma:push",
+    "prisma-push-force": "npm --prefix backend run prisma:push:force",
+    "prisma-push-force-reset": "npm --prefix backend run prisma:push:force:reset",
     "prisma-migrate": "npm --prefix backend run prisma:migrate",
     "test": "jest"
   },

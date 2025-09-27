@@ -89,7 +89,27 @@ export function ColorPickerButton({
         onClose={() => setOpen(false)}
         className="p-2"
       >
-        <HexColorPicker color={color} onChange={onChange} />
+        <div className="flex flex-col items-center">
+          <div className="text-text font-semibold mb-2 text-lg">
+            Select Color
+          </div>
+          <HexColorPicker color={color} onChange={onChange} />
+
+          <input
+            type="text"
+            value={color}
+            onFocus={(e) => e.target.select()}
+            onChange={(e) => onChange(e.target.value)}
+            className="input-box px-2 py-1 w-auto mt-2 text-center"
+          />
+          <button
+            type="button"
+            className="btn-normal w-auto mt-2"
+            onClick={() => setOpen(false)}
+          >
+            Select Color
+          </button>
+        </div>
       </AnimatedDialog>
     </>
   );

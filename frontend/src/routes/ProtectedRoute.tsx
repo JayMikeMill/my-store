@@ -15,8 +15,17 @@ export function ProtectedRoute({
   const { user, loading } = useAuth();
 
   if (loading) return <div>Loading...</div>;
-  if (!user || !user.role || !allowedRoles.includes(user.role))
-    return <LoginDialog />;
+  const notAuth = !user || !user.role || !allowedRoles.includes(user.role);
 
-  return children;
+  return (
+    <>
+      <LoginDialog
+        open={notAuth}
+        onClose={() => {
+          window.location.reload();
+        }}
+      />
+      {!notAuth && children}
+    </>
+  );
 }

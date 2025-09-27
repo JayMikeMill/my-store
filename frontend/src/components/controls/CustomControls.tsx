@@ -21,3 +21,7 @@ export const XButton: React.FC<ButtonProps> = ({ onClick, className }) => {
     </button>
   );
 };
+
+export const NavButton = (isActive: boolean) => {
+  return isActive ? "btn-normal-active" : "btn-normal";
+};

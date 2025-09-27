@@ -5,7 +5,7 @@ import type { Order } from "@shared/types/Order";
 import DynamicTable from "@components/dynamic-table/DynamicTable";
 import OrderDialog from "@components/dialogs/OrderDialog";
 
-export default function AdminUsersDash() {
+export default function AdminSettingsPage() {
   const [editingOrder, setEditingOrder] = useState<Order | null>(null);
   const [tableKey, setTableKey] = useState(0);
 
@@ -16,8 +16,12 @@ export default function AdminUsersDash() {
   };
 
   const handleSaveOrder = async (update: Partial<Order>) => {
-    if (!editingOrder || !editingOrder.id) return;
-    await orders.update({ ...editingOrder, ...update, id: editingOrder.id });
+    if (!editingOrder) return;
+    await orders.update({
+      ...editingOrder,
+      ...update,
+      id: editingOrder.id as string,
+    });
   };
 
   return (
@@ -38,7 +42,7 @@ export default function AdminUsersDash() {
           fetchPage={orders.getAll}
           key={tableKey}
           onRowClick={(o) => setEditingOrder(o)}
-          objectsName="Users"
+          objectsName="Search orders..."
           pageSize={10}
           searchable={true}
           columns={[]}

@@ -23,9 +23,9 @@ router.use("/payments", paymentRoutes);
 router.use("/storage", storageRoutes);
 
 // ---------- CRUD Routes ----------
-router.use("/products/options-presets", adminCRUD(db.productOptionsPresets));
 router.use("/products/tags-presets", adminCRUD(db.productTagsPresets));
-router.use("/products/variants", adminCRUD(db.productVariants));
+router.use("/products/options-presets", adminCRUD(db.productOptionsPresets));
+
 router.use(
   "/products/reviews",
   adminCRUD(db.productReviews, { create: ["user", "admin"] })

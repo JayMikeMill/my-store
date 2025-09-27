@@ -5,7 +5,7 @@ import type { Order } from "@shared/types/Order";
 import DynamicTable from "@components/dynamic-table/DynamicTable";
 import OrderDialog from "@components/dialogs/OrderDialog";
 
-export default function AdminCatalogDash() {
+export default function AdminUsersPage() {
   const [editingOrder, setEditingOrder] = useState<Order | null>(null);
   const [tableKey, setTableKey] = useState(0);
 
@@ -16,8 +16,8 @@ export default function AdminCatalogDash() {
   };
 
   const handleSaveOrder = async (update: Partial<Order>) => {
-    if (!editingOrder) return;
-    await orders.update({ ...editingOrder, ...update });
+    if (!editingOrder || !editingOrder.id) return;
+    await orders.update({ ...editingOrder, ...update, id: editingOrder.id });
   };
 
   return (
@@ -38,7 +38,7 @@ export default function AdminCatalogDash() {
           fetchPage={orders.getAll}
           key={tableKey}
           onRowClick={(o) => setEditingOrder(o)}
-          objectsName="Catalog"
+          objectsName="Users"
           pageSize={10}
           searchable={true}
           columns={[]}

@@ -5,10 +5,14 @@ import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { Zoom } from "yet-another-react-lightbox/plugins";
 
+//  Types
+import type { ProductImageSet } from "@shared/types/Product";
+
 // Components
 import CropDialog from "@components/dialogs/CropDialog";
-import { processImageOnly } from "@utils/image-processing";
-import type { ProductImageSet } from "@shared/types/Product";
+
+// Image processing
+import ProductImagesProcessor from "./ProductImagesProcessor";
 
 interface ImageListEditorProps {
   className?: string;
@@ -17,7 +21,7 @@ interface ImageListEditorProps {
   setIsProcessingImages: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ImageListEditor: React.FC<ImageListEditorProps> = ({
+const ProductImagesEditor: React.FC<ImageListEditorProps> = ({
   className,
   images,
   onImagesChange,
@@ -79,7 +83,7 @@ const ImageListEditor: React.FC<ImageListEditorProps> = ({
       );
 
       const { mainBlob, previewBlob, thumbBlob } =
-        await processImageOnly(croppedFile);
+        await ProductImagesProcessor.process(croppedFile);
 
       // Replace placeholder with fully processed image
       const fullyProcessed: ProductImageSet = {
@@ -236,4 +240,4 @@ const ImageListEditor: React.FC<ImageListEditorProps> = ({
   );
 };
 
-export default ImageListEditor;
+export default ProductImagesEditor;

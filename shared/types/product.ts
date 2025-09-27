@@ -11,13 +11,13 @@ export interface Product {
   stock: number;
   reviewCount?: number;
   averageRating?: number;
+  dimensions?: ProductDimensions;
   images?: ProductImageSet[];
   tags?: ProductTag[];
   options?: ProductOption[];
   variants?: ProductVariant[];
   categories?: Category[];
   collections?: Collection[];
-  dimensions?: ProductDimensions;
   reviews?: ProductReview[];
 }
 

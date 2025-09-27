@@ -91,17 +91,22 @@ export class PrismaCRUDAdapter<T> implements CRUDInterface<T> {
   }
 
   private toPrisma(data: Partial<T>, action: "create" | "update") {
-    console.log("toPrisma called with:", {
-      data: JSON.stringify(data),
-      action,
-    });
-
     if (!this.fields) return data;
     const result: any = { ...data };
 
     for (const key in this.fields) {
       const value = data[key as keyof T];
       if (value === undefined) continue;
+
+      // 🔑 remove field completely if not present
+      if (
+        value === undefined ||
+        value === null ||
+        (Array.isArray(value) && !value.length)
+      ) {
+        delete result[key];
+        continue;
+      }
 
       let { type, path } = this.fields[key as keyof T]!;
 

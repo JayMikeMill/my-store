@@ -18,7 +18,8 @@
     "frontend/src/**/*.tsx",
     "shared/**/*.ts",
     "unit-tests/**/*",
-    "backend/src/services/index"
+    "backend/src/services/index",
+    "scripts/PostTypeGen.ts"
   ],
 
   "exclude": ["node_modules", "dist", "build"]

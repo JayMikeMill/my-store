@@ -5,14 +5,14 @@ import { AuthResponse } from "shared/interfaces";
 export const register = controllerHandler({
   handler: async ({ user, password }, req): Promise<AuthResponse> => {
     // Prevent non-admins from creating admin accounts
-    if (user.role === "ADMIN" && req.user?.role !== "ADMIN") {
-      return {
-        user: null,
-        success: false,
-        status: "ERROR",
-        message: "Only admins can create admin accounts",
-      };
-    }
+    // if (user.role === "ADMIN" && req.user?.role !== "ADMIN") {
+    //   return {
+    //     user: null,
+    //     success: false,
+    //     status: "ERROR",
+    //     message: "Only admins can create admin accounts",
+    //   };
+    // }
 
     return S.register(user, password);
   },

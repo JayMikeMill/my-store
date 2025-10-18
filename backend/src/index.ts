@@ -5,7 +5,7 @@ import { env } from "@config";
 
 let currentApp = app;
 
-const PORT = Number(env.SERVER_PORT) || 5000;
+const PORT = Number(env.PORT) || Number(env.DEV_SERVER_PORT) || 3000;
 
 const server = http.createServer((req, res) => currentApp(req, res));
 

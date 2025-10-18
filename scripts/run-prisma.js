@@ -14,6 +14,8 @@ const command = args[0];
 try {
   if (command === "gen") {
     execSync("npx prisma generate", { cwd: "backend", stdio: "inherit" });
+  } else if (command === "push") {
+    execSync("npx prisma push", { cwd: "backend", stdio: "inherit" });
   } else if (command === "push-force") {
     execSync("npx prisma push --force", { cwd: "backend", stdio: "inherit" });
   } else if (command === "push-reset") {

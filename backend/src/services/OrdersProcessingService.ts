@@ -5,13 +5,11 @@ import {
   Product,
   ProductVariant,
   QueryObject,
-} from "@shared/types";
+} from "shared/types";
 import { db, payment, shipping } from "@adapters/services";
 import { DBAdapter } from "@adapters/types/DBAdapter";
-import { toMajorPriceString } from "@shared/utils/PriceUtils";
-import { OrderProcessingApi } from "@shared/interfaces";
-import { getOrderDiminsions } from "@shared/utils";
-import { Shipment } from "@easypost/api";
+import { toMajorPriceString } from "shared/utils/PriceUtils";
+import { OrderProcessingApi } from "shared/interfaces";
 
 class OrderProcessingService implements OrderProcessingApi {
   async placeOrder(

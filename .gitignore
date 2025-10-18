@@ -8,6 +8,9 @@ backend/dist
 backend/dev.db
 backend/.env 
 
+# shared
+shared/dist
+
 # Backend environment variables
 backend/src/adapters/firebase/config/NailStoreFirebaseServiceAccount.json
 

@@ -4,7 +4,7 @@ import {
   PaymentRequest,
   PaymentResult,
   PaymentStatus,
-} from "@shared/types";
+} from "shared/types";
 import Stripe from "stripe";
 import { env } from "@config";
 

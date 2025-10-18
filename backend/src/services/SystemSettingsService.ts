@@ -5,16 +5,16 @@ import type {
   SiteSettings,
   AdminSettings,
   EngineSettings,
-} from "@shared/settings";
+} from "shared";
 
 import {
   defaultSiteSettings,
   defaultAdminSettings,
   defaultEngineSettings,
-} from "@shared/settings";
+} from "shared/settings";
 
 import { db } from "@adapters/services";
-import { SystemSettingsApi } from "@shared/interfaces/ServiceApis";
+import { SystemSettingsApi } from "shared/interfaces/ServiceApis";
 
 class SystemSettingsService implements SystemSettingsApi {
   // Cache: scope -> settings

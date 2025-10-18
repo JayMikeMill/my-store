@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import routes from "@routes/index";
+import routes from "./routes/index";
 
 import { SystemSettingsService } from "@services";
 import cookieParser from "cookie-parser";

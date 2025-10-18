@@ -1,26 +1,8 @@
 {
-  "compilerOptions": {
-    "target": "ES2022", // modern JS output target
-    "module": "commonjs", // use CommonJS modules
-    "moduleResolution": "Node", // resolve node_modules
-    "strict": true, // enable all strict checks
-    "esModuleInterop": true, // allow import from CommonJS
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    "noEmit": true, // don't generate output
-    "baseUrl": ".", // root path for imports
-    "resolveJsonModule": true,
-    "allowJs": true
-  },
-
-  "include": [
-    "backend/src/**/*.ts",
-    "frontend/src/**/*.tsx",
-    "shared/**/*.ts",
-    "unit-tests/**/*",
-    "backend/src/services/index",
-    "scripts/PostTypeGen.ts"
-  ],
-
-  "exclude": ["node_modules", "dist", "build"]
+  "files": [],
+  "references": [
+    { "path": "shared" },
+    { "path": "backend" },
+    { "path": "frontend" }
+  ]
 }

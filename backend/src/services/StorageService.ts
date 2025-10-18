@@ -1,5 +1,5 @@
 import { storage } from "@adapters/services";
-import { FileData, StorageApi } from "@shared/interfaces";
+import { FileData, StorageApi } from "shared/interfaces";
 
 class StorageService implements StorageApi {
   async uploadImage(file: FileData, filename: string): Promise<string> {

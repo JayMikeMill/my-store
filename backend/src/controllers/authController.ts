@@ -1,6 +1,6 @@
 import { controllerHandler } from "@utils";
 import { AuthService as S } from "@services";
-import { AuthResponse } from "@shared/interfaces";
+import { AuthResponse } from "shared/interfaces";
 
 export const register = controllerHandler({
   handler: async ({ user, password }, req): Promise<AuthResponse> => {

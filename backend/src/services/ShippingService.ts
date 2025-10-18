@@ -1,6 +1,6 @@
 // src/services/ShippingService.ts
 import { shipping } from "@adapters/services";
-import { ShippingApi } from "@shared/interfaces";
+import { ShippingApi } from "shared/interfaces";
 import {
   Address,
   Parcel,
@@ -8,7 +8,7 @@ import {
   Shipment,
   AddressVerificationResult,
   ShipmentTrackingResult,
-} from "@shared/types";
+} from "shared/types";
 
 class ShippingService implements ShippingApi {
   async verifyAddress(address: Address): Promise<AddressVerificationResult> {

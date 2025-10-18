@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { AuthRole, getAuthUser } from "./authorization";
-import { parseQueryType, QueryType, QueryObject } from "@shared/types";
+import { parseQueryType, QueryType, QueryObject } from "shared/types";
 
 // Type guard to detect QueryObject
 function isQueryObject<T>(query: QueryType<T>): query is QueryObject<T> {

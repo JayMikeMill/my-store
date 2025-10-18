@@ -1,8 +1,8 @@
 import { register } from "./../controllers/authController";
 // @services/authService.ts
 import { auth } from "@adapters/services";
-import { AuthApi, AuthResponse } from "@shared/interfaces";
-import { User } from "@shared/types";
+import { AuthApi, AuthResponse } from "shared/interfaces";
+import { User } from "shared/types";
 
 class AuthService implements AuthApi {
   async register(user: User, password: string): Promise<AuthResponse> {

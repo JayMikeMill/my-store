@@ -17,8 +17,8 @@
  */
 
 import { PrismaClient } from "@prisma/client";
-import type { CrudInterface } from "@shared/interfaces";
-import { isQueryObject, type QueryType, type QueryObject } from "@shared/types";
+import type { CrudInterface } from "shared/interfaces";
+import { isQueryObject, type QueryType, type QueryObject } from "shared/types";
 import { prismaNestedUpdate } from "./prismaNestedUpdate";
 import { buildPrismaQuery } from "./buildPrismaQuery";
 import {

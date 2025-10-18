@@ -14,7 +14,7 @@
  * - Sorting, pagination (limit & page)
  */
 
-import { DeepDotKeyof, QueryCondition, QueryObject } from "@shared/types";
+import { DeepDotKeyof, QueryCondition, QueryObject } from "shared/types";
 import { ModelMetadata } from "./ModelMetadata";
 
 /** Prisma find parameters */

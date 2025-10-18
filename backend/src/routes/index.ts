@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import apiRoutes from "@routes/apiRoutes";
-import dataRoutes from "@routes/dataRoutes";
+import apiRoutes from "./apiRoutes";
+import dataRoutes from "./dataRoutes";
 
 const router = Router();
 

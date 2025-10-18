@@ -1,6 +1,6 @@
 import EasyPost from "@easypost/api";
 
-import { Address } from "@shared/types";
+import { Address } from "shared/types";
 
 import { ShippingAdapter } from "@adapters/types";
 
@@ -10,7 +10,7 @@ import {
   Shipment,
   AddressVerificationResult,
   ShipmentTrackingResult,
-} from "@shared/types";
+} from "shared/types";
 
 import { env } from "@config";
 

@@ -1,5 +1,5 @@
-import { AuthResponse, AuthStatus } from "@shared/interfaces";
-import { User } from "@shared/types";
+import { AuthResponse, AuthStatus } from "shared/interfaces";
+import { User } from "shared/types";
 
 export interface AuthAdapter {
   register(user: User, password: string): Promise<AuthResponse>;

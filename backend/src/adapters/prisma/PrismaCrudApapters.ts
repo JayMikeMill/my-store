@@ -12,7 +12,7 @@ import type {
   ProductReview,
   Order,
   SystemSettings,
-} from "@shared/types";
+} from "shared/types";
 import { FieldConfigDefaults } from "./ModelMetadata";
 
 //==================================================

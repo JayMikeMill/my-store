@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { auth } from "@adapters/services";
 import dotenv from "dotenv";
 import path from "path";
-import { User, UserRole } from "@shared/types";
+import { User, UserRole } from "shared/types";
 
 // Load environment variables
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });

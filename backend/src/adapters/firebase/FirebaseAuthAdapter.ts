@@ -1,8 +1,8 @@
 // backend/src/adapters/firebase/FirebaseAuthAdapter.ts
-import { User } from "@shared/types";
+import { User } from "shared/types";
 import { AuthAdapter } from "@adapters/types";
 import { useFirebase } from "./config/firebaseAdmin";
-import type { AuthResponse, AuthStatus } from "@shared/interfaces";
+import type { AuthResponse, AuthStatus } from "shared/interfaces";
 
 export class FirebaseAuthAdapter implements AuthAdapter {
   private auth = useFirebase().auth;

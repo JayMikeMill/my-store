@@ -1,4 +1,4 @@
-import { Address } from "@shared/types";
+import { Address } from "shared/types";
 
 import {
   Parcel,
@@ -6,7 +6,7 @@ import {
   Shipment,
   AddressVerificationResult,
   ShipmentTrackingResult,
-} from "@shared/types";
+} from "shared/types";
 
 export interface ShippingAdapter {
   /**

@@ -2,8 +2,8 @@ import jwt from "jsonwebtoken";
 import argon2 from "argon2";
 import { AuthAdapter } from "@adapters/types";
 import { db } from "@adapters/services";
-import { User } from "@shared/types";
-import { AuthResponse } from "@shared/interfaces";
+import { User } from "shared/types";
+import { AuthResponse } from "shared/interfaces";
 
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 const JWT_EXPIRES_IN = "1d";

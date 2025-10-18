@@ -1,4 +1,4 @@
-import { PaymentRequest, PaymentResult } from "@shared/types";
+import { PaymentRequest, PaymentResult } from "shared/types";
 
 export interface PaymentAdapter {
   processPayment(data: PaymentRequest): Promise<PaymentResult>;

@@ -1,4 +1,4 @@
-import { CrudInterface } from "@shared/interfaces";
+import { CrudInterface } from "shared/interfaces";
 import {
   Product,
   ProductVariant,
@@ -10,7 +10,7 @@ import {
   Order,
   User,
   SystemSettings,
-} from "@shared/types";
+} from "shared/types";
 
 export interface DBAdapter {
   products: CrudInterface<Product>;

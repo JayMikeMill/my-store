@@ -2,8 +2,8 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { dataAuth } from "@middleware/dataAuth";
 import type { AuthRole } from "@middleware/authorization";
-import type { CrudInterface } from "@shared/interfaces";
-import { parseQueryType } from "@shared/types";
+import type { CrudInterface } from "shared/interfaces";
+import { parseQueryType } from "shared/types";
 
 export type CRUDRouteAuth = AuthRole[];
 
